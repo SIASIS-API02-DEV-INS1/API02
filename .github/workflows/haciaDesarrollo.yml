@@ -20,7 +20,7 @@ jobs:
           git config --global user.name "SIASIS Hacia Desarrollo Sync Bot"
           git config --global user.email "siasis-sync-from-GeoCoderDev@asuncion8.edu.pe"
       
-      - name: Push to External Repository
+      - name: Push to Repository 1
         run: |
           echo "Configurando repositorio de destino..."
           mkdir -p temp-external-repo
