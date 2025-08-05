@@ -60,7 +60,7 @@ router.put("/", upload.single("foto"), (async (req: Request, res: Response) => {
     let identificador: string | number;
     switch (Rol) {
       case RolesSistema.Responsable:
-        identificador = (userData as ResponsableAuthenticated).DNI_Responsable;
+        identificador = (userData as ResponsableAuthenticated).Id_Responsable;
 
         break;
 

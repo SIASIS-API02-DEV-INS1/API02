@@ -85,7 +85,7 @@ const isPersonalAdministrativoAuthenticated = async (
 
       // Agregar información del usuario decodificada a la solicitud para uso posterior
       req.user = {
-        DNI_Personal_Administrativo: decodedPayload.ID_Usuario,
+        Id_Personal_Administrativo: decodedPayload.ID_Usuario,
         Nombre_Usuario: decodedPayload.Nombre_Usuario,
       } as PersonalAdministrativoAuthenticated;
 

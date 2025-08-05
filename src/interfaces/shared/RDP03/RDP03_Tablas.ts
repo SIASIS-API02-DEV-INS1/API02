@@ -1,4 +1,3 @@
-// src/types/RDP03IdMappings.ts
 
 /**
  * Nombres de todas las tablas en RDP03 (MongoDB)
@@ -28,27 +27,29 @@ export type RDP03_Nombres_Tablas =
   | "T_Ultima_Modificacion_Tablas"
   | "T_Eventos"
   | "T_Directivos"
-  | "T_Personal_Administrativo";
+  | "T_Personal_Administrativo"
+  | "T_Vacaciones_Interescolares";
 
 /**
  * Nombres de todos los campos ID en el sistema
  */
 export type RDP03_Campos_ID =
-  | "DNI_Estudiante"
-  | "DNI_Responsable"
+  | "Id_Estudiante"
+  | "Id_Responsable"
   | "Id_Relacion"
-  | "DNI_Profesor_Primaria"
-  | "DNI_Profesor_Secundaria"
+  | "Id_Profesor_Primaria"
+  | "Id_Profesor_Secundaria"
   | "Id_Aula"
   | "Id_Curso_Horario"
-  | "DNI_Auxiliar"
+  | "Id_Auxiliar"
   | "Id_Bloqueo_Rol"
   | "Id_Registro_Fallo_Sistema"
   | "Id_Asistencia_Escolar_Mensual"
   | "Nombre_Tabla"
   | "Id_Evento"
   | "Id_Directivo"
-  | "DNI_Personal_Administrativo";
+  | "Id_Personal_Administrativo" 
+  | "Id_Vacacion_Interescolar";
 
 /**
  * Mapeo de tablas a sus campos ID correspondientes
@@ -59,16 +60,16 @@ export const RDP03_MONGODB_TO_APP_ID_MAPPING: Record<
   RDP03_Campos_ID
 > = {
   // Entidades principales
-  T_Estudiantes: "DNI_Estudiante",
-  T_Responsables: "DNI_Responsable",
+  T_Estudiantes: "Id_Estudiante",
+  T_Responsables: "Id_Responsable",
   T_Relaciones_E_R: "Id_Relacion",
-  T_Profesores_Primaria: "DNI_Profesor_Primaria",
-  T_Profesores_Secundaria: "DNI_Profesor_Secundaria",
+  T_Profesores_Primaria: "Id_Profesor_Primaria",
+  T_Profesores_Secundaria: "Id_Profesor_Secundaria",
   T_Aulas: "Id_Aula",
   T_Cursos_Horario: "Id_Curso_Horario",
-  T_Auxiliares: "DNI_Auxiliar",
+  T_Auxiliares: "Id_Auxiliar",
   T_Directivos: "Id_Directivo",
-  T_Personal_Administrativo: "DNI_Personal_Administrativo",
+  T_Personal_Administrativo: "Id_Personal_Administrativo",
 
   // Entidades de control
   T_Bloqueo_Roles: "Id_Bloqueo_Rol",
@@ -90,6 +91,8 @@ export const RDP03_MONGODB_TO_APP_ID_MAPPING: Record<
   T_A_E_S_3: "Id_Asistencia_Escolar_Mensual",
   T_A_E_S_4: "Id_Asistencia_Escolar_Mensual",
   T_A_E_S_5: "Id_Asistencia_Escolar_Mensual",
+
+  T_Vacaciones_Interescolares: "Id_Vacacion_Interescolar",
 };
 
 /**
@@ -97,21 +100,22 @@ export const RDP03_MONGODB_TO_APP_ID_MAPPING: Record<
  * Campo esperado por la aplicación -> MongoDB (_id)
  */
 export const RDP03_APP_TO_MONGODB_ID_MAPPING: Record<RDP03_Campos_ID, "_id"> = {
-  DNI_Estudiante: "_id",
-  DNI_Responsable: "_id",
+  Id_Estudiante: "_id",
+  Id_Responsable: "_id",
   Id_Relacion: "_id",
-  DNI_Profesor_Primaria: "_id",
-  DNI_Profesor_Secundaria: "_id",
+  Id_Profesor_Primaria: "_id",
+  Id_Profesor_Secundaria: "_id",
   Id_Aula: "_id",
   Id_Curso_Horario: "_id",
-  DNI_Auxiliar: "_id",
+  Id_Auxiliar: "_id",
   Id_Bloqueo_Rol: "_id",
   Id_Registro_Fallo_Sistema: "_id",
   Id_Asistencia_Escolar_Mensual: "_id",
   Nombre_Tabla: "_id",
   Id_Evento: "_id",
   Id_Directivo: "_id",
-  DNI_Personal_Administrativo: "_id",
+  Id_Personal_Administrativo: "_id",
+  Id_Vacacion_Interescolar: "_id",
 };
 
 /**
@@ -222,7 +226,7 @@ export function transformarResultadoMongoDB<T = any>(
 /**
  * Función auxiliar para transformar un elemento individual
  */
-function transformarElemento(elemento: any, campoId: RDP03_Campos_ID): any {
+export function transformarElemento(elemento: any, campoId: RDP03_Campos_ID): any {
   if (!elemento || typeof elemento !== "object") return elemento;
 
   const { _id, ...resto } = elemento;
@@ -232,6 +236,23 @@ function transformarElemento(elemento: any, campoId: RDP03_Campos_ID): any {
     ...resto,
   };
 }
+
+/**
+ * Función auxiliar para transformar un elemento para registrar en RDP03
+ * (Operación inversa a transformarElemento)
+ */
+export function transformarElementoParaRegistrarEnRDP03(elemento: any, campoId: RDP03_Campos_ID): any {
+  if (!elemento || typeof elemento !== "object") return elemento;
+
+  // Crear una copia para no mutar el objeto original
+  const { [campoId]: valorId, ...resto } = elemento;
+
+  return {
+    _id: valorId,
+    ...resto,
+  };
+}
+
 
 /**
  * Pipeline de agregación estándar para una tabla

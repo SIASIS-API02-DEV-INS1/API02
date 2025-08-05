@@ -34,7 +34,7 @@ app.use(
 // Ruta de 404 NOT FOUND
 app.use("*", (req, res) => {
   res.status(404).json({
-    message: `La ruta ${req.originalUrl} no existe en este servidor, el ip fue ${req.ip}`,
+    message: `La ruta ${req.originalUrl} no existe en este servidor`,
   });
 });
 

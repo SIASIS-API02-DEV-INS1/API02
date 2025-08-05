@@ -14,8 +14,9 @@ import decodedRol from "../middlewares/decodedRol";
 import isResponsableAuthenticated from "../middlewares/isResponsableAuthenticated";
 import checkAuthentication from "../middlewares/checkAuthentication";
 import misDatosRouter from "./api/mis-datos";
-import EventosRouter from "./api/eventos";
 import modificacionesTablasRouter from "./api/modificaciones-tablas";
+import estudiantesRelacionadosRouter from "./api/estudiantes-relacionados";
+import EventosRouter from "./api/eventos";
 
 import isDirectivoAuthenticated from "../middlewares/isDirectivoAuthenticated";
 import isProfesorPrimariaAuthenticated from "../middlewares/isProfesorPrimariaAuthenticated";
@@ -23,6 +24,7 @@ import isProfesorSecundariaAuthenticated from "../middlewares/isProfesorSecundar
 import isTutorAuthenticated from "../middlewares/isTutorAuthenticated";
 import isAuxiliarAuthenticated from "../middlewares/isAuxiliarAuthenticated";
 import isPersonalAdministrativoAuthenticated from "../middlewares/isPersonalAdministrativoAuthenticated";
+
 
 
 const router = Router();
@@ -67,6 +69,14 @@ router.use(
   isResponsableAuthenticated,
   checkAuthentication as any,
   modificacionesTablasRouter
+);
+
+router.use(
+  "/estudiantes-relacionados",
+  decodedRol as any,
+  isResponsableAuthenticated,
+  checkAuthentication as any,
+  estudiantesRelacionadosRouter
 );
 
 router.use("/eventos", decodedRol as any, EventosRouter);

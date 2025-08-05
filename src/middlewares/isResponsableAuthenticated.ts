@@ -14,9 +14,9 @@ import {
   UserErrorTypes,
 } from "../interfaces/shared/errors";
 import {
-  buscarResponsablePorDNI,
+  buscarResponsablePorId,
   verificarEstudiantesActivosResponsable,
-} from "../../core/databases/queries/RDP03/responsables/buscarResponsablePorDNI";
+} from "../../core/databases/queries/RDP03/responsables/buscarResponsablePorId";
 import { verificarBloqueoRol } from "../../core/databases/queries/RDP03/bloqueo-roles/verificarBloqueoRolResponsable";
 
 // Middleware para verificar si el usuario es un Responsable (Padre/Apoderado)
@@ -106,7 +106,7 @@ const isResponsableAuthenticated = async (
         }
 
         // Verificar si el responsable existe (usando MongoDB)
-        const responsable = await buscarResponsablePorDNI(
+        const responsable = await buscarResponsablePorId(
           decodedPayload.ID_Usuario
         );
 
@@ -146,7 +146,7 @@ const isResponsableAuthenticated = async (
 
       // Agregar información del usuario decodificada a la solicitud para uso posterior
       req.user = {
-        DNI_Responsable: decodedPayload.ID_Usuario,
+        Id_Responsable: decodedPayload.ID_Usuario,
         Nombre_Usuario: decodedPayload.Nombre_Usuario,
       } as ResponsableAuthenticated;
 

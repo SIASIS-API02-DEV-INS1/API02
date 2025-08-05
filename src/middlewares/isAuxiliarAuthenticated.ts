@@ -87,7 +87,7 @@ const isAuxiliarAuthenticated = async (
 
       // Agregar información del usuario decodificada a la solicitud para uso posterior
       req.user = {
-        DNI_Auxiliar: decodedPayload.ID_Usuario,
+        Id_Auxiliar: decodedPayload.ID_Usuario,
         Nombre_Usuario: decodedPayload.Nombre_Usuario,
       } as AuxiliarAuthenticated;
 

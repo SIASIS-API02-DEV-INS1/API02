@@ -114,7 +114,7 @@ router.post("/", (async (req: Request, res: Response) => {
 
     // Generar token JWT
     const token = generateResponsableToken(
-      responsable.DNI_Responsable,
+      responsable.Id_Responsable,
       responsable.Nombre_Usuario
     );
 

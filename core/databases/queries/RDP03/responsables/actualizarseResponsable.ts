@@ -11,13 +11,13 @@ const TABLA_ACTUAL: RDP03_Nombres_Tablas = "T_Responsables";
 
 /**
  * Actualiza los datos de un responsable (solo celular permitido)
- * @param dniResponsable DNI del responsable a actualizar
+ * @param idResponsable Id del responsable a actualizar
  * @param datos Datos a actualizar
  * @param instanciaEnUso Instancia específica donde ejecutar la consulta (opcional)
  * @returns true si la actualización fue exitosa, false si no se encontró el responsable
  */
 export async function actualizarseResponsable(
-  dniResponsable: string,
+  idResponsable: string,
   datos: {
     Celular?: string;
   },
@@ -41,7 +41,7 @@ export async function actualizarseResponsable(
 
     // Convertir filtro usando el sistema de mapeo
     const filtroMongoDB = convertirFiltroParaMongoDB(TABLA_ACTUAL, {
-      DNI_Responsable: dniResponsable,
+      Id_Responsable: idResponsable,
     });
 
     // Ejecutar la operación de actualización en MongoDB

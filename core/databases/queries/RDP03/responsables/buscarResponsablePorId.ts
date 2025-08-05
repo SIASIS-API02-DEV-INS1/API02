@@ -1,4 +1,3 @@
-// src/core/databases/queries/RDP03/responsables/buscarResponsablePorDNI.ts
 import { T_Responsables } from "@prisma/client";
 import { RDP03 } from "../../../../../src/interfaces/shared/RDP03Instancias";
 import { RolesSistema } from "../../../../../src/interfaces/shared/RolesSistema";
@@ -13,19 +12,19 @@ import {
 
 
 /**
- * Busca un responsable por su DNI
- * @param dniResponsable DNI del responsable
+ * Busca un responsable por su Id
+ * @param idResponsable Id del responsable
  * @param instanciaEnUso Instancia específica donde ejecutar la consulta (opcional)
  * @returns Datos del responsable o null si no existe
  */
-export async function buscarResponsablePorDNI(
-  dniResponsable: string,
+export async function buscarResponsablePorId(
+  idResponsable: string,
   instanciaEnUso?: RDP03
 ): Promise<T_Responsables | null> {
   try {
     // Crear pipeline usando el sistema de mapeo
     const pipeline = crearPipelineEstandar("T_Responsables", {
-      DNI_Responsable: dniResponsable,
+      Id_Responsable: idResponsable,
     });
 
     // Ejecutar operación
@@ -50,22 +49,22 @@ export async function buscarResponsablePorDNI(
       ? responsableTransformado[0]
       : null;
   } catch (error) {
-    console.error("Error buscando responsable por DNI:", error);
+    console.error("Error buscando responsable por Id:", error);
     throw error;
   }
 }
 
 /**
- * Busca un responsable por su DNI y selecciona campos específicos
- * @param dniResponsable DNI del responsable
+ * Busca un responsable por su Id y selecciona campos específicos
+ * @param idResponsable Id del responsable
  * @param campos Campos específicos a seleccionar (keyof T_Responsables)
  * @param instanciaEnUso Instancia específica donde ejecutar la consulta (opcional)
  * @returns Datos parciales del responsable o null si no existe
  */
-export async function buscarResponsablePorDNISelect<
+export async function buscarResponsablePorIdSelect<
   K extends keyof T_Responsables
 >(
-  dniResponsable: string,
+  idResponsable: string,
   campos: K[],
   instanciaEnUso?: RDP03
 ): Promise<Pick<T_Responsables, K> | null> {
@@ -78,7 +77,7 @@ export async function buscarResponsablePorDNISelect<
 
     // Convertir filtro
     const filtroMongoDB = convertirFiltroParaMongoDB("T_Responsables", {
-      DNI_Responsable: dniResponsable,
+      Id_Responsable: idResponsable,
     });
 
     // Ejecutar operación
@@ -103,19 +102,19 @@ export async function buscarResponsablePorDNISelect<
       ? responsableTransformado[0]
       : null;
   } catch (error) {
-    console.error("Error buscando responsable por DNI con proyección:", error);
+    console.error("Error buscando responsable por Id con proyección:", error);
     throw error;
   }
 }
 
 /**
  * Verifica si un responsable tiene estudiantes activos asociados
- * @param dniResponsable DNI del responsable
+ * @param idResponsable Id del responsable
  * @param instanciaEnUso Instancia específica donde ejecutar la consulta (opcional)
  * @returns true si tiene al menos un estudiante activo, false en caso contrario
  */
 export async function verificarEstudiantesActivosResponsable(
-  dniResponsable: string,
+  idResponsable: string,
   instanciaEnUso?: RDP03
 ): Promise<boolean> {
   try {
@@ -130,13 +129,13 @@ export async function verificarEstudiantesActivosResponsable(
         pipeline: [
           {
             $match: {
-              DNI_Responsable: dniResponsable,
+              Id_Responsable: idResponsable,
             },
           },
           {
             $lookup: {
               from: "T_Estudiantes",
-              localField: "DNI_Estudiante",
+              localField: "Id_Estudiante",
               foreignField: "_id",
               as: "estudiante",
             },
@@ -179,7 +178,7 @@ export async function buscarResponsablePorNombreUsuarioParaLogin(
   instanciaEnUso?: RDP03
 ): Promise<Pick<
   T_Responsables,
-  | "DNI_Responsable"
+  | "Id_Responsable"
   | "Nombres"
   | "Apellidos"
   | "Nombre_Usuario"
@@ -196,7 +195,7 @@ export async function buscarResponsablePorNombreUsuarioParaLogin(
         filter: { Nombre_Usuario: nombreUsuario },
         options: {
           projection: {
-            DNI_Responsable: 1,
+            Id_Responsable: 1,
             Nombres: 1,
             Apellidos: 1,
             Nombre_Usuario: 1,
@@ -237,7 +236,7 @@ export async function buscarResponsablePorNombreUsuarioDirecto(
       },
       {
         $project: {
-          DNI_Responsable: 1,
+          Id_Responsable: 1,
           Nombres: 1,
           Apellidos: 1,
           Nombre_Usuario: 1,
@@ -267,7 +266,7 @@ export async function buscarResponsablePorNombreUsuarioDirecto(
 
       // Mapear manualmente el resultado
       return {
-        DNI_Responsable: responsable.DNI_Responsable || responsable._id,
+        Id_Responsable: responsable.Id_Responsable || responsable._id,
         Nombres: responsable.Nombres,
         Apellidos: responsable.Apellidos,
         Nombre_Usuario: responsable.Nombre_Usuario,
@@ -284,87 +283,16 @@ export async function buscarResponsablePorNombreUsuarioDirecto(
   }
 }
 
-/**
- * Función auxiliar: Obtiene todos los estudiantes relacionados con un responsable
- * @param dniResponsable DNI del responsable
- * @param instanciaEnUso Instancia específica donde ejecutar la consulta (opcional)
- * @returns Array de estudiantes relacionados con el responsable
- */
-export async function obtenerEstudiantesDelResponsable(
-  dniResponsable: string,
-  instanciaEnUso?: RDP03
-): Promise<
-  Array<{
-    DNI_Estudiante: string;
-    Nombres: string;
-    Apellidos: string;
-    Estado: boolean;
-    Id_Aula: string | null;
-    Tipo_Relacion: string;
-  }>
-> {
-  try {
-    const estudiantes = await executeMongoOperation<any[]>(
-      instanciaEnUso,
-      {
-        operation: "aggregate",
-        collection: "T_Relaciones_E_R",
-        pipeline: [
-          {
-            $match: {
-              DNI_Responsable: dniResponsable,
-            },
-          },
-          {
-            $lookup: {
-              from: "T_Estudiantes",
-              localField: "DNI_Estudiante",
-              foreignField: "_id",
-              as: "estudiante",
-            },
-          },
-          {
-            $unwind: "$estudiante",
-          },
-          // Proyección usando el sistema de mapeo
-          {
-            $project: {
-              DNI_Estudiante: "$estudiante._id",
-              Nombres: "$estudiante.Nombres",
-              Apellidos: "$estudiante.Apellidos",
-              Estado: "$estudiante.Estado",
-              Id_Aula: "$estudiante.Id_Aula",
-              Tipo_Relacion: "$Tipo",
-              _id: 0,
-            },
-          },
-          {
-            $sort: {
-              Apellidos: 1,
-              Nombres: 1,
-            },
-          },
-        ],
-        options: {},
-      },
-      RolesSistema.Responsable
-    );
 
-    return estudiantes || [];
-  } catch (error) {
-    console.error("Error obteniendo estudiantes del responsable:", error);
-    throw error;
-  }
-}
 
 /**
  * Función auxiliar: Verifica si un responsable existe y está activo (tiene estudiantes activos)
- * @param dniResponsable DNI del responsable
+ * @param idResponsable Id del responsable
  * @param instanciaEnUso Instancia específica donde ejecutar la consulta (opcional)
  * @returns Objeto con información del responsable y estado de actividad
  */
 export async function verificarEstadoCompletoResponsable(
-  dniResponsable: string,
+  idResponsable: string,
   instanciaEnUso?: RDP03
 ): Promise<{
   existe: boolean;
@@ -374,8 +302,8 @@ export async function verificarEstadoCompletoResponsable(
 }> {
   try {
     // Buscar el responsable usando la función optimizada
-    const responsable = await buscarResponsablePorDNI(
-      dniResponsable,
+    const responsable = await buscarResponsablePorId(
+      idResponsable,
       instanciaEnUso
     );
 
@@ -399,13 +327,13 @@ export async function verificarEstadoCompletoResponsable(
         pipeline: [
           {
             $match: {
-              DNI_Responsable: dniResponsable,
+              Id_Responsable: idResponsable,
             },
           },
           {
             $lookup: {
               from: "T_Estudiantes",
-              localField: "DNI_Estudiante",
+              localField: "Id_Estudiante",
               foreignField: "_id",
               as: "estudiante",
             },
@@ -449,7 +377,7 @@ export async function verificarEstadoCompletoResponsable(
  * @param limite Número máximo de responsables a devolver
  * @param salto Número de responsables a saltar (para paginación)
  * @param instanciaEnUso Instancia específica donde ejecutar la consulta (opcional)
- * @returns Array de responsables con DNI_Responsable renombrado
+ * @returns Array de responsables con Id_Responsable renombrado
  */
 export async function obtenerResponsablesPaginados(
   limite: number = 10,
@@ -520,7 +448,7 @@ export async function buscarResponsablesPorTexto(
       "Nombres",
       "Apellidos",
       "Nombre_Usuario",
-      "Celular",
+      "Celular"
     ]);
 
     const pipeline = [

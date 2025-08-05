@@ -19,7 +19,7 @@ export interface RegistrarAsistenciaIndividualSuccessResponse
 
 // ✅ Interface principal (flexible para todos los casos)
 export interface RegistrarAsistenciaIndividualRequestBody {
-  ID_o_DNI?: string; // ✅ Opcional para registro propio
+  ID_o_Id?: string; // ✅ Opcional para registro propio
   TipoAsistencia?: TipoAsistencia;
   Actor?: ActoresSistema | RolesSistema;
   ModoRegistro: ModoRegistro;
@@ -36,13 +36,13 @@ export interface RegistroPropio {
 }
 
 export interface RegistroPersonal extends RegistroPropio {
-  ID_o_DNI: string;
+  ID_o_Id: string;
   TipoAsistencia: TipoAsistencia.ParaPersonal;
   Actor: Exclude<ActoresSistema, ActoresSistema.Estudiante>;
 }
 
 export interface RegistroEstudiante extends RegistroPropio {
-  ID_o_DNI: string;
+  ID_o_Id: string;
   TipoAsistencia:
     | TipoAsistencia.ParaEstudiantesPrimaria
     | TipoAsistencia.ParaEstudiantesSecundaria;

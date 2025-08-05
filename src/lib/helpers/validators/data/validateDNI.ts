@@ -2,17 +2,17 @@ import { ValidationErrorTypes } from "../../../../interfaces/shared/errors";
 import { ValidationResult } from "./types";
 
 /**
- * Valida un DNI peruano
+ * Valida un Id peruano
  * @param value - Valor a validar
  * @param required - Indica si el campo es obligatorio
  * @returns Resultado de la validación
  */
-export function validateDNI(value: any, required: boolean): ValidationResult {
+export function validateId(value: any, required: boolean): ValidationResult {
     if ((value === undefined || value === null) && required) {
       return {
         isValid: false,
         errorType: ValidationErrorTypes.FIELD_REQUIRED,
-        errorMessage: "El DNI es requerido"
+        errorMessage: "El Id es requerido"
       };
     }
     
@@ -24,16 +24,16 @@ export function validateDNI(value: any, required: boolean): ValidationResult {
       return {
         isValid: false,
         errorType: ValidationErrorTypes.INVALID_FORMAT,
-        errorMessage: "El DNI debe ser una cadena de texto"
+        errorMessage: "El Id debe ser una cadena de texto"
       };
     }
     
-    const dniRegex = /^\d{8}$/;
-    if (!dniRegex.test(value)) {
+    const idRegex = /^\d{8}$/;
+    if (!idRegex.test(value)) {
       return {
         isValid: false,
-        errorType: ValidationErrorTypes.INVALID_DNI,
-        errorMessage: "El DNI debe contener exactamente 8 dígitos numéricos"
+        errorType: ValidationErrorTypes.INVALID_Id,
+        errorMessage: "El Id debe contener exactamente 8 dígitos numéricos"
       };
     }
     

@@ -43,7 +43,7 @@ export async function subirFotoPerfil(
     const configuracion = {
       [RolesSistema.Responsable]: {
         collection: "T_Responsables" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Responsable",
+        campoId: "Id_Responsable",
         campoDrive: "Google_Drive_Foto_ID",
         campoUsuario: "Nombre_Usuario",
         carpeta: "Fotos de Perfil/Responsables",
@@ -52,7 +52,7 @@ export async function subirFotoPerfil(
       },
       [ActoresSistema.Estudiante]: {
         collection: "T_Estudiantes" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Estudiante",
+        campoId: "Id_Estudiante",
         campoDrive: "Google_Drive_Foto_ID",
         campoUsuario: "",
         carpeta: "Fotos de Perfil/Estudiantes",
@@ -123,7 +123,7 @@ export async function subirFotoPerfil(
       // Si se provee un nombre específico, usar ese
       archivoFinal = `${nombreArchivo}.${extension}`;
     } else if (actorTipo === ActoresSistema.Estudiante) {
-      // Para estudiantes, usar el DNI
+      // Para estudiantes, usar el Id
       archivoFinal = `estudiante_${idValor}.${extension}`;
     } else {
       // Para otros roles, usar el nombre de usuario
@@ -223,49 +223,49 @@ export async function obtenerFotoPerfil(
       },
       [RolesSistema.Auxiliar]: {
         collection: "T_Auxiliares" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Auxiliar",
+        campoId: "Id_Auxiliar",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Auxiliar",
       },
       [RolesSistema.ProfesorPrimaria]: {
         collection: "T_Profesores_Primaria" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Profesor_Primaria",
+        campoId: "Id_Profesor_Primaria",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Profesor de primaria",
       },
       [RolesSistema.ProfesorSecundaria]: {
         collection: "T_Profesores_Secundaria" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Profesor_Secundaria",
+        campoId: "Id_Profesor_Secundaria",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Profesor de secundaria",
       },
       [RolesSistema.Tutor]: {
         collection: "T_Profesores_Secundaria" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Profesor_Secundaria",
+        campoId: "Id_Profesor_Secundaria",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Tutor",
       },
       [RolesSistema.PersonalAdministrativo]: {
         collection: "T_Personal_Administrativo" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Personal_Administrativo",
+        campoId: "Id_Personal_Administrativo",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Personal administrativo",
       },
       [RolesSistema.Responsable]: {
         collection: "T_Responsables" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Responsable",
+        campoId: "Id_Responsable",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Responsable",
       },
       [ActoresSistema.Estudiante]: {
         collection: "T_Estudiantes" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Estudiante",
+        campoId: "Id_Estudiante",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Estudiante",
@@ -375,49 +375,49 @@ export async function eliminarFotoPerfil(
       },
       [RolesSistema.Auxiliar]: {
         collection: "T_Auxiliares" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Auxiliar",
+        campoId: "Id_Auxiliar",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Auxiliar",
       },
       [RolesSistema.ProfesorPrimaria]: {
         collection: "T_Profesores_Primaria" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Profesor_Primaria",
+        campoId: "Id_Profesor_Primaria",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Profesor de primaria",
       },
       [RolesSistema.ProfesorSecundaria]: {
         collection: "T_Profesores_Secundaria" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Profesor_Secundaria",
+        campoId: "Id_Profesor_Secundaria",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Profesor de secundaria",
       },
       [RolesSistema.Tutor]: {
         collection: "T_Profesores_Secundaria" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Profesor_Secundaria",
+        campoId: "Id_Profesor_Secundaria",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Tutor",
       },
       [RolesSistema.PersonalAdministrativo]: {
         collection: "T_Personal_Administrativo" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Personal_Administrativo",
+        campoId: "Id_Personal_Administrativo",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Personal administrativo",
       },
       [RolesSistema.Responsable]: {
         collection: "T_Responsables" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Responsable",
+        campoId: "Id_Responsable",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Responsable",
       },
       [ActoresSistema.Estudiante]: {
         collection: "T_Estudiantes" as RDP03_Nombres_Tablas,
-        campoId: "DNI_Estudiante",
+        campoId: "Id_Estudiante",
         campoDrive: "Google_Drive_Foto_ID",
         esNumerico: false,
         mensaje: "Estudiante",

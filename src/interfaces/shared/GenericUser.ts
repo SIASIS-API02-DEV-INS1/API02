@@ -12,7 +12,7 @@ import { RolesSistema } from "./RolesSistema";
 export type DirectivoGenerico = Pick<
   T_Directivos,
   | "Id_Directivo"
-  | "DNI"
+  | "Id"
   | "Nombres"
   | "Apellidos"
   | "Genero"
@@ -21,12 +21,12 @@ export type DirectivoGenerico = Pick<
 
 export type AuxiliarGenerico = Pick<
   T_Auxiliares,
-  "DNI_Auxiliar" | "Nombres" | "Apellidos" | "Genero" | "Google_Drive_Foto_ID"
+  "Id_Auxiliar" | "Nombres" | "Apellidos" | "Genero" | "Google_Drive_Foto_ID"
 >;
 
 export type ProfesorPrimariaGenerico = Pick<
   T_Profesores_Primaria,
-  | "DNI_Profesor_Primaria"
+  | "Id_Profesor_Primaria"
   | "Nombres"
   | "Apellidos"
   | "Genero"
@@ -35,7 +35,7 @@ export type ProfesorPrimariaGenerico = Pick<
 
 export type ProfesorSecundariaGenerico = Pick<
   T_Profesores_Secundaria,
-  | "DNI_Profesor_Secundaria"
+  | "Id_Profesor_Secundaria"
   | "Nombres"
   | "Apellidos"
   | "Genero"
@@ -44,27 +44,27 @@ export type ProfesorSecundariaGenerico = Pick<
 
 export type ResponsableGenerico = Pick<
   T_Responsables,
-  "DNI_Responsable" | "Nombres" | "Apellidos" | "Google_Drive_Foto_ID"
+  "Id_Responsable" | "Nombres" | "Apellidos" | "Google_Drive_Foto_ID"
 >;
 
 export type TutorGenerico = Pick<
   T_Profesores_Secundaria,
-  "DNI_Profesor_Secundaria" | "Nombres" | "Apellidos" | "Genero"
+  "Id_Profesor_Secundaria" | "Nombres" | "Apellidos" | "Genero"
 >;
 
 export type PersonalAdministrativoGenerico = Pick<
   T_Personal_Administrativo,
-  "DNI_Personal_Administrativo" | "Nombres" | "Apellidos" | "Genero"
+  "Id_Personal_Administrativo" | "Nombres" | "Apellidos" | "Genero"
 >;
 
 
 
 export interface GenericUser {
-  ID_O_DNI_Usuario: string;
+  ID_O_Id_Usuario: string;
   Rol: RolesSistema;
   Nombres: string;
   Apellidos: string;
   Genero?: Genero;
-  DNI_Directivo?: string;
+  Id_Directivo?: string;
   Google_Drive_Foto_ID: string | null;
 }

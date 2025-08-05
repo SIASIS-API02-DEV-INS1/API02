@@ -1,4 +1,5 @@
 
+import { RDP03_Nombres_Tablas } from "../RDP03/RDP03_Tablas";
 import { RDP03 } from "../RDP03Instancias";
 
 /**
@@ -28,7 +29,7 @@ export interface MongoOperation {
     | "replaceOne"
     | "aggregate"
     | "countDocuments";
-  collection: string;
+  collection: RDP03_Nombres_Tablas;
   filter?: any;
   data?: any;
   options?: any;

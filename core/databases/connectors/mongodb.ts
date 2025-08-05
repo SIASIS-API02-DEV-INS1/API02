@@ -16,6 +16,7 @@ import { getRDP03DatabaseURLForThisInstance } from "../../../src/lib/helpers/ins
 import { getInstanciasRDP03AfectadasPorRoles } from "../../../src/lib/helpers/instances/getInstanciasRDP03AfectadasPorRoles";
 import { MongoOperation } from "../../../src/interfaces/shared/EMCN01/EMCN01Payload";
 import { consultarConEMCN01 } from "../../external/github/EMCN01/consultarConEMCN01";
+import { RDP03_Nombres_Tablas } from "../../../src/interfaces/shared/RDP03/RDP03_Tablas";
 
 dotenv.config();
 
@@ -398,7 +399,7 @@ export async function executeMongoTransaction<T = any>(
       const enhancedDb = new Proxy(db, {
         get(target, prop, receiver) {
           if (prop === "collection") {
-            return function (name: string) {
+            return function (name: RDP03_Nombres_Tablas) {
               const collection = target.collection(name);
 
               // Crear proxy de la colección para interceptar operaciones

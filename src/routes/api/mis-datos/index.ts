@@ -1,4 +1,3 @@
-// src/routes/api01/mis-datos/index.ts
 import { Request, Response, Router } from "express";
 import { RolesSistema } from "../../../interfaces/shared/RolesSistema";
 import { ResponsableAuthenticated } from "../../../interfaces/shared/JWTPayload";
@@ -17,21 +16,12 @@ import {
   UserErrorTypes,
 } from "../../../interfaces/shared/errors";
 
-// Importar funciones MongoDB para responsables
-import { buscarResponsablePorDNISelect } from "../../../../core/databases/queries/RDP03/responsables/buscarResponsablePorDNI";
 import { actualizarseResponsable } from "../../../../core/databases/queries/RDP03/responsables/actualizarseResponsable";
 import { handleMongoError } from "../../../lib/helpers/handlers/errors/mongoDB";
-import { ActualizarUsuarioSuccessResponseAPI02, MisDatosErrorResponseAPI02, MisDatosSuccessResponseAPI02 } from "../../../interfaces/shared/apis/api02/mis-datos/types";
+import { ActualizarUsuarioSuccessResponseAPI02, MisDatosErrorResponseAPI02, MisDatosResponsable, MisDatosSuccessResponseAPI02 } from "../../../interfaces/shared/apis/api02/mis-datos/types";
+import { buscarResponsablePorIdSelect } from "../../../../core/databases/queries/RDP03/responsables/buscarResponsablePorId";
 
-// Interfaz específica para los datos de responsable
-export interface MisDatosResponsable {
-  DNI_Responsable: string;
-  Nombres: string;
-  Apellidos: string;
-  Nombre_Usuario: string;
-  Celular?: string | null;
-  Google_Drive_Foto_ID?: string | null;
-}
+
 
 const router = Router();
 
@@ -53,11 +43,11 @@ router.get("/", (async (req: Request, res: Response) => {
       });
     }
 
-    // Buscar el responsable por DNI con campos específicos usando MongoDB
-    const responsable = await buscarResponsablePorDNISelect(
-      userData.DNI_Responsable,
+    // Buscar el responsable por Id con campos específicos usando MongoDB
+    const responsable = await buscarResponsablePorIdSelect(
+      userData.Id_Responsable,
       [
-        "DNI_Responsable",
+        "Id_Responsable",
         "Nombres",
         "Apellidos",
         "Nombre_Usuario",
@@ -77,7 +67,7 @@ router.get("/", (async (req: Request, res: Response) => {
 
     // Estructurar los datos según la interfaz esperada
     const misDatos: MisDatosResponsable = {
-      DNI_Responsable: responsable.DNI_Responsable,
+      Id_Responsable: responsable.Id_Responsable,
       Nombres: responsable.Nombres,
       Apellidos: responsable.Apellidos,
       Nombre_Usuario: responsable.Nombre_Usuario,
@@ -167,7 +157,7 @@ router.put("/", (async (req: Request, res: Response) => {
 
     // Actualizar el responsable usando MongoDB
     const updated = await actualizarseResponsable(
-      userData.DNI_Responsable,
+      userData.Id_Responsable,
       updatedFields,
       rdp03EnUso
     );
@@ -190,7 +180,7 @@ router.put("/", (async (req: Request, res: Response) => {
 
     // Intentar manejar el error con la función específica para errores MongoDB
     const handledError = handleMongoError(error, {
-      DNI_Responsable: "DNI",
+      Id_Responsable: "Id",
       Nombre_Usuario: "nombre de usuario",
       Celular: "celular",
     });

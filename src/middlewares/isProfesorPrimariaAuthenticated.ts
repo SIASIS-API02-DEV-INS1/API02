@@ -84,7 +84,7 @@ const isProfesorPrimariaAuthenticated = async (
 
       // Agregar información del usuario decodificada a la solicitud para uso posterior
       req.user = {
-        DNI_Profesor_Primaria: decodedPayload.ID_Usuario,
+        Id_Profesor_Primaria: decodedPayload.ID_Usuario,
         Nombre_Usuario: decodedPayload.Nombre_Usuario,
       } as ProfesorPrimariaAuthenticated;
 

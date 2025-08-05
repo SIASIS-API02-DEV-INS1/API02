@@ -4,11 +4,11 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("RDP03_INS5_DATABASE_URL_PROD_IE20935")
+  url      = env("RDP03_INS1_DATABASE_URL_DESA")
 }
 
 model T_Estudiantes {
-  DNI_Estudiante           String             @id @map("_id")
+  Id_Estudiante           String             @id @map("_id")
   Nombres                  String
   Apellidos                String
   Estado                   Boolean
@@ -32,7 +32,7 @@ model T_Estudiantes {
 }
 
 model T_Responsables {
-  DNI_Responsable      String             @id @map("_id")
+  Id_Responsable      String             @id @map("_id")
   Nombres              String
   Apellidos            String
   Nombre_Usuario       String             @unique
@@ -47,16 +47,16 @@ model T_Responsables {
 model T_Relaciones_E_R {
   Id_Relacion     String         @id @default(auto()) @map("_id") @db.ObjectId
   Tipo            String
-  DNI_Responsable String
-  DNI_Estudiante  String
-  responsable     T_Responsables @relation(fields: [DNI_Responsable], references: [DNI_Responsable])
-  estudiante      T_Estudiantes  @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante])
+  Id_Responsable String
+  Id_Estudiante  String
+  responsable     T_Responsables @relation(fields: [Id_Responsable], references: [Id_Responsable])
+  estudiante      T_Estudiantes  @relation(fields: [Id_Estudiante], references: [Id_Estudiante])
 
   @@map("T_Relaciones_E_R")
 }
 
 model T_Profesores_Primaria {
-  DNI_Profesor_Primaria String    @id @map("_id")
+  Id_Profesor_Primaria String    @id @map("_id")
   Nombres               String
   Apellidos             String
   Genero                String
@@ -72,7 +72,7 @@ model T_Profesores_Primaria {
 }
 
 model T_Profesores_Secundaria {
-  DNI_Profesor_Secundaria String             @id @map("_id")
+  Id_Profesor_Secundaria String             @id @map("_id")
   Nombres                 String
   Apellidos               String
   Genero                  String
@@ -94,10 +94,10 @@ model T_Aulas {
   Grado                   Int
   Seccion                 String
   Color                   String
-  DNI_Profesor_Primaria   String?
-  DNI_Profesor_Secundaria String?
-  profesor_primaria       T_Profesores_Primaria?   @relation(fields: [DNI_Profesor_Primaria], references: [DNI_Profesor_Primaria])
-  profesor_secundaria     T_Profesores_Secundaria? @relation(fields: [DNI_Profesor_Secundaria], references: [DNI_Profesor_Secundaria])
+  Id_Profesor_Primaria   String?
+  Id_Profesor_Secundaria String?
+  profesor_primaria       T_Profesores_Primaria?   @relation(fields: [Id_Profesor_Primaria], references: [Id_Profesor_Primaria])
+  profesor_secundaria     T_Profesores_Secundaria? @relation(fields: [Id_Profesor_Secundaria], references: [Id_Profesor_Secundaria])
   estudiantes             T_Estudiantes[]
   cursos_horario          T_Cursos_Horario[]
 
@@ -110,16 +110,16 @@ model T_Cursos_Horario {
   Dia_Semana                   Int
   Indice_Hora_Academica_Inicio Int
   Cant_Hora_Academicas         Int
-  DNI_Profesor_Secundaria      String
+  Id_Profesor_Secundaria      String
   Id_Aula_Secundaria           String                  @db.ObjectId
-  profesor_secundaria          T_Profesores_Secundaria @relation(fields: [DNI_Profesor_Secundaria], references: [DNI_Profesor_Secundaria])
+  profesor_secundaria          T_Profesores_Secundaria @relation(fields: [Id_Profesor_Secundaria], references: [Id_Profesor_Secundaria])
   aula                         T_Aulas                 @relation(fields: [Id_Aula_Secundaria], references: [Id_Aula])
 
   @@map("T_Cursos_Horario")
 }
 
 model T_Auxiliares {
-  DNI_Auxiliar         String  @id @map("_id")
+  Id_Auxiliar         String  @id @map("_id")
   Nombres              String
   Apellidos            String
   Genero               String
@@ -133,6 +133,32 @@ model T_Auxiliares {
   @@map("T_Auxiliares")
 }
 
+model T_Directivos {
+  Id_Directivo         String     @id @map("_id")
+  Nombres              String  
+  Apellidos            String  
+  Genero               String  
+  Identificador_Nacional String  
+  Nombre_Usuario       String  @unique 
+  Correo_Electronico   String  
+  Celular              String  
+  Contraseña          String  
+  Google_Drive_Foto_ID String? 
+  }
+
+model T_Personal_Administrativo {
+  Id_Personal_Administrativo String  @id @map("_id")
+  Nombres                     String 
+  Apellidos                   String 
+  Genero                      String 
+  Nombre_Usuario              String @unique
+  Estado                      Boolean
+  Celular                     String 
+  Contraseña                 String 
+  Google_Drive_Foto_ID        String?
+  Cargo             String
+}
+
 model T_Bloqueo_Roles {
   Rol                  String  @id @map("_id")
   Bloqueo_Total        Boolean
@@ -140,6 +166,9 @@ model T_Bloqueo_Roles {
 
   @@map("T_Bloqueo_Roles")
 }
+
+
+
 
 model T_Registro_Fallos_Sistema {
   Id_Registro_Fallo_Sistema String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -154,60 +183,60 @@ model T_Registro_Fallos_Sistema {
 
 model T_A_E_P_1 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
-  DNI_Estudiante                String
+  Id_Estudiante                String
   Mes                           Int
   Estados                       String
-  estudiante                    T_Estudiantes @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante], onDelete: Cascade)
+  estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_1")
 }
 
 model T_A_E_P_2 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
-  DNI_Estudiante                String
+  Id_Estudiante                String
   Mes                           Int
   Estados                       String
-  estudiante                    T_Estudiantes @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante], onDelete: Cascade)
+  estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_2")
 }
 
 model T_A_E_P_3 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
-  DNI_Estudiante                String
+  Id_Estudiante                String
   Mes                           Int
   Estados                       String
-  estudiante                    T_Estudiantes @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante], onDelete: Cascade)
+  estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_3")
 }
 
 model T_A_E_P_4 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
-  DNI_Estudiante                String
+  Id_Estudiante                String
   Mes                           Int
   Estados                       String
-  estudiante                    T_Estudiantes @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante], onDelete: Cascade)
+  estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_4")
 }
 
 model T_A_E_P_5 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
-  DNI_Estudiante                String
+  Id_Estudiante                String
   Mes                           Int
   Estados                       String
-  estudiante                    T_Estudiantes @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante], onDelete: Cascade)
+  estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_5")
 }
 
 model T_A_E_P_6 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
-  DNI_Estudiante                String
+  Id_Estudiante                String
   Mes                           Int
   Estados                       String
-  estudiante                    T_Estudiantes @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante], onDelete: Cascade)
+  estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_6")
 }
@@ -216,50 +245,50 @@ model T_A_E_P_6 {
 
 model T_A_E_S_1 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
-  DNI_Estudiante                String
+  Id_Estudiante                String
   Mes                           Int
   Estados                       String
-  estudiante                    T_Estudiantes @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante], onDelete: Cascade)
+  estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_S_1")
 }
 
 model T_A_E_S_2 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
-  DNI_Estudiante                String
+  Id_Estudiante                String
   Mes                           Int
   Estados                       String
-  estudiante                    T_Estudiantes @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante], onDelete: Cascade)
+  estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_S_2")
 }
 
 model T_A_E_S_3 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
-  DNI_Estudiante                String
+  Id_Estudiante                String
   Mes                           Int
   Estados                       String
-  estudiante                    T_Estudiantes @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante], onDelete: Cascade)
+  estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_S_3")
 }
 
 model T_A_E_S_4 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
-  DNI_Estudiante                String
+  Id_Estudiante                String
   Mes                           Int
   Estados                       String
-  estudiante                    T_Estudiantes @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante], onDelete: Cascade)
+  estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_S_4")
 }
 
 model T_A_E_S_5 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
-  DNI_Estudiante                String
+  Id_Estudiante                String
   Mes                           Int
   Estados                       String
-  estudiante                    T_Estudiantes @relation(fields: [DNI_Estudiante], references: [DNI_Estudiante], onDelete: Cascade)
+  estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_S_5")
 }
@@ -283,32 +312,10 @@ model T_Eventos {
   @@map("T_Eventos")
 }
 
-model T_Directivos {
-  Id_Directivo         String  @id @default(auto()) @map("_id") @db.ObjectId
-  Nombres              String
-  Apellidos            String
-  Genero               String
-  DNI                  String
-  Nombre_Usuario       String  @unique
-  Correo_Electronico   String
-  Celular              String
-  Contraseña          String
-  Google_Drive_Foto_ID String?
+model T_Vacaciones_Interescolares {
+  Id_Vacacion_Interescolar String     @id @default(auto()) @map("_id") @db.ObjectId
+  Fecha_Inicio             DateTime @db.Date
+  Fecha_Conclusion         DateTime @db.Date
 
-  @@map("T_Directivos")
-}
-
-model T_Personal_Administrativo {
-  DNI_Personal_Administrativo String  @id @default(auto()) @map("_id") @db.ObjectId
-  Nombres                     String
-  Apellidos                   String
-  Genero                      String
-  Nombre_Usuario              String  @unique
-  Estado                      Boolean
-  Celular                     String
-  Contraseña                 String
-  Google_Drive_Foto_ID        String?
-  Cargo                       String
-
-  @@map("T_Personal_Administrativo")
+  @@map("T_Vacaciones_Interescolares")
 }

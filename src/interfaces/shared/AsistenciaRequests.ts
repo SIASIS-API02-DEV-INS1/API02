@@ -7,7 +7,7 @@ import { EstadosAsistencia } from "./EstadosAsistenciaEstudiantes";
 
 export interface RegistroAsistenciaUnitariaPersonal {
   ModoRegistro: ModoRegistro;
-  DNI: string;
+  Id: string;
   Rol: RolesSistema | ActoresSistema;
   Dia: number;
   Detalles:
@@ -23,7 +23,7 @@ export interface DetallesAsistenciaUnitariaEstudiantes {
 
 export type RegistroAsistenciaMensualPersonal = Pick<
   RegistroAsistenciaUnitariaPersonal,
-  "DNI" | "Rol" | "ModoRegistro"
+  "Id" | "Rol" | "ModoRegistro"
 > & {
   Mes: Meses;
   RegistrosDelMes: Record<number, DetallesAsistenciaUnitariaPersonal | null>;
@@ -36,10 +36,10 @@ export interface DetallesAsistenciaUnitariaPersonal {
 
 /**
  * ✅ ACTUALIZADO: Resultado individual de asistencia diaria
- * Ahora usa ID_o_DNI para soportar tanto IDs de directivos como DNIs de otros roles
+ * Ahora usa ID_o_Id para soportar tanto IDs de directivos como Ids de otros roles
  */
 export interface AsistenciaDiariaResultado {
-  ID_o_DNI: string; // ✅ ACTUALIZADO: Era "DNI", ahora soporta ID (directivos) o DNI (otros)
+  ID_o_Id: string; // ✅ ACTUALIZADO: Era "Id", ahora soporta ID (directivos) o Id (otros)
   AsistenciaMarcada: boolean;
   Detalles: {
     // Para estudiantes
@@ -76,7 +76,7 @@ export interface ConsultaAsistenciaPropia {
 export interface ConsultaAsistenciaPersonal extends ConsultaAsistenciaPropia {
   Actor: Exclude<ActoresSistema, ActoresSistema.Estudiante>;
   TipoAsistencia: TipoAsistencia.ParaPersonal;
-  ID_o_DNI: string; // ID para directivos, DNI para otros
+  ID_o_Id: string; // ID para directivos, Id para otros
 }
 
 // Para consulta de estudiantes específicos
@@ -85,7 +85,7 @@ export interface ConsultaAsistenciaEstudiante extends ConsultaAsistenciaPropia {
   TipoAsistencia:
     | TipoAsistencia.ParaEstudiantesPrimaria
     | TipoAsistencia.ParaEstudiantesSecundaria;
-  ID_o_DNI?: string; // Opcional para consulta individual
+  ID_o_Id?: string; // Opcional para consulta individual
   NivelEducativo?: string; // Requerido para consultas grupales o individuales
   Grado?: string; // Requerido para consultas grupales o individuales
   Seccion?: string; // Requerido para consultas grupales o individuales
@@ -113,7 +113,7 @@ export interface IniciarTomaAsistenciaRequestBody {
 export interface AsistenciaMensualPersonal {
   Id_Registro_Mensual: number;
   mes: Meses;
-  ID_o_Dni_Personal: string;
+  ID_o_Id_Personal: string;
   registros: Record<string, RegistroEntradaSalida>;
 }
 
@@ -132,7 +132,7 @@ export interface RegistroEntradaSalidaPersonal {
 
 // Interface para el request body
 export interface EliminarAsistenciaRequestBody {
-  ID_o_DNI: string;
+  ID_o_Id: string;
   Actor: ActoresSistema;
   ModoRegistro: ModoRegistro;
   TipoAsistencia: TipoAsistencia;

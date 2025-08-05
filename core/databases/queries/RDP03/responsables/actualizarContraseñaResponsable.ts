@@ -11,20 +11,20 @@ const TABLA_ACTUAL: RDP03_Nombres_Tablas = "T_Responsables";
 
 /**
  * Actualiza la contraseña de un responsable
- * @param dniResponsable DNI del responsable
+ * @param idResponsable Id del responsable
  * @param nuevaContraseña Nueva contraseña ya encriptada
  * @param instanciaEnUso Instancia específica donde ejecutar la consulta (opcional)
  * @returns true si se actualizó correctamente, false si no se encontró el responsable
  */
 export async function actualizarContraseñaResponsable(
-  dniResponsable: string,
+  idResponsable: string,
   nuevaContraseña: string,
   instanciaEnUso?: RDP03
 ): Promise<boolean> {
   try {
     // Convertir filtro usando el sistema de mapeo
     const filtroMongoDB = convertirFiltroParaMongoDB(TABLA_ACTUAL, {
-      DNI_Responsable: dniResponsable,
+      Id_Responsable: idResponsable,
     });
 
     const resultado = await executeMongoOperation<{

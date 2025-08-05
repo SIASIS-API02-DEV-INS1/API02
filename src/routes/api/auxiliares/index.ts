@@ -10,7 +10,7 @@
 //   UserErrorTypes,
 //   ValidationErrorTypes,
 // } from "../../../interfaces/shared/errors";
-// import { validateDNI } from "../../../lib/helpers/validators/data/validateDNI";
+// import { validateId } from "../../../lib/helpers/validators/data/validateId";
 // import { ValidatorConfig } from "../../../lib/helpers/validators/data/types";
 // import { validateNames } from "../../../lib/helpers/validators/data/validateNombres";
 // import { validateLastNames } from "../../../lib/helpers/validators/data/validateApellidos";
@@ -27,7 +27,7 @@
 // } from "../../../interfaces/shared/apis/api01/auxiliares/types";
 
 // // Importar funciones de consulta
-// import { buscarAuxiliarPorDNISelect } from "../../../../core/databases/queries/RDP02/auxiliares/buscarAuxiliarPorDNI";
+// import { buscarAuxiliarPorIdSelect } from "../../../../core/databases/queries/RDP02/auxiliares/buscarAuxiliarPorId";
 // import { verificarExistenciaAuxiliar } from "../../../../core/databases/queries/RDP02/auxiliares/verificarExistenciaAuxiliar";
 // import { buscarTodosLosAuxiliares } from "../../../../core/databases/queries/RDP02/auxiliares/buscarTodosLosAuxiliares";
 // import { handleSQLError } from "../../../lib/helpers/handlers/errors/postgreSQL";
@@ -74,27 +74,27 @@
 //   }
 // }) as any);
 
-// // Obtener un auxiliar por DNI
-// router.get("/:dni", (async (req: Request, res: Response) => {
+// // Obtener un auxiliar por Id
+// router.get("/:id", (async (req: Request, res: Response) => {
 //   try {
-//     const { dni } = req.params;
+//     const { id } = req.params;
 //     const rdp02EnUso = req.RDP02_INSTANCE!;
 
-//     // Validar el formato del DNI
-//     const dniValidation = validateDNI(dni, true);
-//     if (!dniValidation.isValid) {
+//     // Validar el formato del Id
+//     const idValidation = validateId(id, true);
+//     if (!idValidation.isValid) {
 //       return res.status(400).json({
 //         success: false,
-//         message: dniValidation.errorMessage,
-//         errorType: ValidationErrorTypes.INVALID_DNI,
+//         message: idValidation.errorMessage,
+//         errorType: ValidationErrorTypes.INVALID_Id,
 //       } as ErrorResponseAPIBase);
 //     }
 
 //     // Obtener auxiliar
-//     const auxiliar = await buscarAuxiliarPorDNISelect(
-//       dni,
+//     const auxiliar = await buscarAuxiliarPorIdSelect(
+//       id,
 //       [
-//         "DNI_Auxiliar",
+//         "Id_Auxiliar",
 //         "Nombres",
 //         "Apellidos",
 //         "Celular",
@@ -138,25 +138,25 @@
 // }) as any);
 
 // // Actualizar un auxiliar
-// router.put("/:dni", (async (req: Request, res: Response) => {
+// router.put("/:id", (async (req: Request, res: Response) => {
 //   try {
-//     const { dni } = req.params;
+//     const { id } = req.params;
 //     const rdp02EnUso = req.RDP02_INSTANCE!;
 //     const { Nombres, Apellidos, Genero, Celular, Correo_Electronico } =
 //       req.body as UpdateAuxiliarRequestBody;
 
-//     // Validar el formato del DNI
-//     const dniValidation = validateDNI(dni, true);
-//     if (!dniValidation.isValid) {
+//     // Validar el formato del Id
+//     const idValidation = validateId(id, true);
+//     if (!idValidation.isValid) {
 //       return res.status(400).json({
 //         success: false,
-//         message: dniValidation.errorMessage,
-//         errorType: ValidationErrorTypes.INVALID_DNI,
+//         message: idValidation.errorMessage,
+//         errorType: ValidationErrorTypes.INVALID_Id,
 //       } as ErrorResponseAPIBase);
 //     }
 
 //     // Verificar si el auxiliar existe
-//     const existingAuxiliar = await verificarExistenciaAuxiliar(dni, rdp02EnUso);
+//     const existingAuxiliar = await verificarExistenciaAuxiliar(id, rdp02EnUso);
 
 //     if (!existingAuxiliar) {
 //       return res.status(404).json({
@@ -229,7 +229,7 @@
 
 //     // Actualizar auxiliar
 //     const updatedAuxiliar = await actualizarDatosDeAuxiliar(
-//       dni,
+//       id,
 //       updateData,
 //       rdp02EnUso
 //     );
@@ -266,27 +266,27 @@
 
 // // Cambiar estado de un auxiliar (activar/desactivar)
 // router.patch(
-//   "/:dni/estado",
+//   "/:id/estado",
 //   isDirectivoAuthenticated,
 //   checkAuthentication as any,
 //   (async (req: Request, res: Response) => {
 //     try {
-//       const { dni } = req.params;
+//       const { id } = req.params;
 //       const rdp02EnUso = req.RDP02_INSTANCE!;
 
-//       // Validar el formato del DNI
-//       const dniValidation = validateDNI(dni, true);
-//       if (!dniValidation.isValid) {
+//       // Validar el formato del Id
+//       const idValidation = validateId(id, true);
+//       if (!idValidation.isValid) {
 //         return res.status(400).json({
 //           success: false,
-//           message: dniValidation.errorMessage,
-//           errorType: ValidationErrorTypes.INVALID_DNI,
+//           message: idValidation.errorMessage,
+//           errorType: ValidationErrorTypes.INVALID_Id,
 //         } as ErrorResponseAPIBase);
 //       }
 
 //       // Cambiar el estado del auxiliar
 //       const updatedAuxiliar = await cambiarEstadoAuxiliar(
-//         dni,
+//         id,
 //         undefined,
 //         rdp02EnUso
 //       );

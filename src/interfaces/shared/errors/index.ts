@@ -74,7 +74,7 @@ export enum SystemErrorTypes {
  * Errores relacionados a validaciones de datos
  */
 export enum ValidationErrorTypes {
-  INVALID_DNI = "INVALID_DNI",
+  INVALID_Id = "INVALID_Id",
   INVALID_GENDER = "INVALID_GENDER",
   INVALID_PHONE = "INVALID_PHONE",
   INVALID_EMAIL = "INVALID_EMAIL",

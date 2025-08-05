@@ -83,7 +83,7 @@ router.put("/", (async (req: Request, res: Response) => {
 
     // Obtener la contraseña actual del responsable desde MongoDB
     const contraseñaAlmacenada = await buscarContraseñaResponsable(
-      (userData as ResponsableAuthenticated).DNI_Responsable,
+      (userData as ResponsableAuthenticated).Id_Responsable,
       rdp03EnUso
     );
 
@@ -114,7 +114,7 @@ router.put("/", (async (req: Request, res: Response) => {
 
     // Actualizar la contraseña en MongoDB
     const actualizacionExitosa = await actualizarContraseñaResponsable(
-      (userData as ResponsableAuthenticated).DNI_Responsable,
+      (userData as ResponsableAuthenticated).Id_Responsable,
       contraseñaEncriptada,
       rdp03EnUso
     );
@@ -136,7 +136,7 @@ router.put("/", (async (req: Request, res: Response) => {
 
     // Intentar manejar el error con la función específica para errores de MongoDB
     const handledError = handleMongoError(error, {
-      DNI_Responsable: "DNI del responsable",
+      Id_Responsable: "Id del responsable",
       Nombre_Usuario: "nombre de usuario",
     });
 

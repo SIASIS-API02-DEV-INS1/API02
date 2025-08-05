@@ -84,7 +84,7 @@ const isTutorAuthenticated = async (
 
       // Agregar información del usuario decodificada a la solicitud para uso posterior
       req.user = {
-        DNI_Profesor_Secundaria: decodedPayload.ID_Usuario,
+        Id_Profesor_Secundaria: decodedPayload.ID_Usuario,
         Nombre_Usuario: decodedPayload.Nombre_Usuario,
       } as ProfesorTutorSecundariaAuthenticated;
 
