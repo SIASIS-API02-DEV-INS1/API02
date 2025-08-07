@@ -11,13 +11,13 @@ export interface EstudianteDelResponsable {
   Google_Drive_Foto_ID?: string | null;
 }
 
-export interface MisEstudiantesSuccessResponseAPI02 {
+export interface MisEstudiantesRelacionadosSuccessResponseAPI02 {
   success: true;
   data: EstudianteDelResponsable[];
   total: number;
 }
 
-export interface MisEstudiantesErrorResponseAPI02 {
+export interface MisEstudiantesRelacionadosErrorResponseAPI02 {
   success: false;
   message: string;
   errorType: string;

@@ -7,7 +7,7 @@ import {
   TokenErrorTypes,
 } from "../../../interfaces/shared/errors";
 import { obtenerEstudiantesRelacionadosParaResponsable } from "../../../../core/databases/queries/RDP03/estudiantes/obtenerEstudiantesRelacionadosParaResponsable";
-import { EstudianteDelResponsable, MisEstudiantesErrorResponseAPI02, MisEstudiantesSuccessResponseAPI02 } from "../../../interfaces/shared/apis/api02/estudiantes-relacionados/types";
+import { EstudianteDelResponsable, MisEstudiantesRelacionadosErrorResponseAPI02, MisEstudiantesRelacionadosSuccessResponseAPI02 } from "../../../interfaces/shared/apis/api02/mis-estudiantes-relacionados/types";
 
 const router = Router();
 
@@ -27,7 +27,7 @@ router.get("/", (async (req: Request, res: Response) => {
           RolesTexto[RolesSistema.Responsable].singular
         }`,
         errorType: TokenErrorTypes.TOKEN_WRONG_ROLE,
-      } as MisEstudiantesErrorResponseAPI02);
+      } as MisEstudiantesRelacionadosErrorResponseAPI02);
     }
 
     // Obtener estudiantes relacionados al responsable usando MongoDB
@@ -54,7 +54,7 @@ router.get("/", (async (req: Request, res: Response) => {
       success: true,
       data: estudiantesTransformados,
       total: estudiantesTransformados.length,
-    } as MisEstudiantesSuccessResponseAPI02);
+    } as MisEstudiantesRelacionadosSuccessResponseAPI02);
   } catch (error) {
     console.error("Error al obtener estudiantes del responsable:", error);
     return res.status(500).json({
@@ -62,7 +62,7 @@ router.get("/", (async (req: Request, res: Response) => {
       message: "Error al obtener los estudiantes relacionados",
       errorType: SystemErrorTypes.UNKNOWN_ERROR,
       details: error,
-    } as MisEstudiantesErrorResponseAPI02);
+    } as MisEstudiantesRelacionadosErrorResponseAPI02);
   }
 }) as any);
 
