@@ -17,6 +17,7 @@ export enum RequestErrorTypes {
   REQUEST_FAILED = "REQUEST_FAILED",
   MALFORMED_REQUEST = "MALFORMED_REQUEST", // 🆕 Solicitud mal formada
   PAYLOAD_TOO_LARGE = "PAYLOAD_TOO_LARGE", // 🆕 Carga útil demasiado grande
+  MISSING_REQUIRED_PARAMETERS="MISSING_REQUIRED_PARAMETERS"
 }
 
 /**

@@ -16,7 +16,7 @@ import checkAuthentication from "../middlewares/checkAuthentication";
 import misDatosRouter from "./api/mis-datos";
 import modificacionesTablasRouter from "./api/modificaciones-tablas";
 import estudiantesRelacionadosRouter from "./api/estudiantes-relacionados";
-import EventosRouter from "./api/eventos";
+import eventosRouter from "./api/eventos";
 
 import isDirectivoAuthenticated from "../middlewares/isDirectivoAuthenticated";
 import isProfesorPrimariaAuthenticated from "../middlewares/isProfesorPrimariaAuthenticated";
@@ -24,6 +24,7 @@ import isProfesorSecundariaAuthenticated from "../middlewares/isProfesorSecundar
 import isTutorAuthenticated from "../middlewares/isTutorAuthenticated";
 import isAuxiliarAuthenticated from "../middlewares/isAuxiliarAuthenticated";
 import isPersonalAdministrativoAuthenticated from "../middlewares/isPersonalAdministrativoAuthenticated";
+import aulasRouter from "./api/aulas";
 
 
 
@@ -72,13 +73,15 @@ router.use(
 );
 
 router.use(
-  "/estudiantes-relacionados",
+  "/mis-estudiantes-relacionados",
   decodedRol as any,
   isResponsableAuthenticated,
   checkAuthentication as any,
   estudiantesRelacionadosRouter
 );
 
-router.use("/eventos", decodedRol as any, EventosRouter);
+router.use("/eventos", decodedRol , eventosRouter);
+
+router.use("/aulas", decodedRol, aulasRouter )
 
 export default router;
