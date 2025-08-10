@@ -15,7 +15,7 @@ import isResponsableAuthenticated from "../middlewares/isResponsableAuthenticate
 import checkAuthentication from "../middlewares/checkAuthentication";
 import misDatosRouter from "./api/mis-datos";
 import modificacionesTablasRouter from "./api/modificaciones-tablas";
-import estudiantesRelacionadosRouter from "./api/estudiantes-relacionados";
+import estudiantesRelacionadosRouter from "./api/mis-estudiantes-relacionados";
 import eventosRouter from "./api/eventos";
 
 import isDirectivoAuthenticated from "../middlewares/isDirectivoAuthenticated";

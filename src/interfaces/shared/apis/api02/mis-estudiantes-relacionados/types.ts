@@ -1,14 +1,9 @@
+import { T_Estudiantes } from "@prisma/client";
 
 
 // Interfaz para la respuesta de estudiantes
-export interface EstudianteDelResponsable {
-  Id_Estudiante: string;
-  Nombres: string;
-  Apellidos: string;
-  Estado: boolean;
-  Id_Aula: string | null;
+export interface EstudianteDelResponsable extends T_Estudiantes {
   Tipo_Relacion: string;
-  Google_Drive_Foto_ID?: string | null;
 }
 
 export interface MisEstudiantesRelacionadosSuccessResponseAPI02 {

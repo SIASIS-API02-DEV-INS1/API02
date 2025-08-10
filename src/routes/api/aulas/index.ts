@@ -1,4 +1,3 @@
-// src/routes/api02/aulas/index.ts
 import { Request, Response, Router } from "express";
 import { RolesSistema } from "../../../interfaces/shared/RolesSistema";
 import { RolesTexto } from "../../../../assets/RolesTextosEspañol";
