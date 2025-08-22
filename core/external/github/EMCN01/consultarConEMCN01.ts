@@ -1,7 +1,5 @@
-import {
-  EMCN01Payload,
-  MongoOperation,
-} from "../../../../src/interfaces/shared/EMCN01/EMCN01Payload";
+import { EMCN01Payload } from "../../../../src/interfaces/shared/EMCN01/EMCN01Payload";
+import { MongoOperation } from "../../../../src/interfaces/shared/RDP03/MongoOperation";
 import { RDP03 } from "../../../../src/interfaces/shared/RDP03Instancias";
 
 // Constantes para el webhook de GitHub para MongoDB
