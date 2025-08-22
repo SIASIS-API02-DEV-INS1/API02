@@ -14,9 +14,9 @@ import { getRDP03InstancesForThisRol } from "../../../src/lib/helpers/instances/
 import { esOperacionMongoLectura } from "../../../src/lib/helpers/comprobations/esOperacionMongoLectura";
 import { getRDP03DatabaseURLForThisInstance } from "../../../src/lib/helpers/instances/getRDP03DatabaseURLForThisInstance";
 import { getInstanciasRDP03AfectadasPorRoles } from "../../../src/lib/helpers/instances/getInstanciasRDP03AfectadasPorRoles";
-import { MongoOperation } from "../../../src/interfaces/shared/EMCN01/EMCN01Payload";
 import { consultarConEMCN01 } from "../../external/github/EMCN01/consultarConEMCN01";
 import { RDP03_Nombres_Tablas } from "../../../src/interfaces/shared/RDP03/RDP03_Tablas";
+import { MongoOperation } from "../../../src/interfaces/shared/RDP03/MongoOperation";
 
 dotenv.config();
 

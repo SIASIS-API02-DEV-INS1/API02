@@ -28,7 +28,8 @@ export type RDP03_Nombres_Tablas =
   | "T_Eventos"
   | "T_Directivos"
   | "T_Personal_Administrativo"
-  | "T_Vacaciones_Interescolares";
+  | "T_Vacaciones_Interescolares"
+  | "T_Modificaciones_Especificas";
 
 /**
  * Nombres de todos los campos ID en el sistema
@@ -49,7 +50,8 @@ export type RDP03_Campos_ID =
   | "Id_Evento"
   | "Id_Directivo"
   | "Id_Personal_Administrativo" 
-  | "Id_Vacacion_Interescolar";
+  | "Id_Vacacion_Interescolar"
+  | "Id_Modificacion_Especifica";
 
 /**
  * Mapeo de tablas a sus campos ID correspondientes
@@ -76,6 +78,7 @@ export const RDP03_MONGODB_TO_APP_ID_MAPPING: Record<
   T_Registro_Fallos_Sistema: "Id_Registro_Fallo_Sistema",
   T_Eventos: "Id_Evento",
   T_Ultima_Modificacion_Tablas: "Nombre_Tabla",
+  T_Modificaciones_Especificas: "Id_Modificacion_Especifica",
 
   // Tablas de asistencia primaria
   T_A_E_P_1: "Id_Asistencia_Escolar_Mensual",
@@ -93,6 +96,7 @@ export const RDP03_MONGODB_TO_APP_ID_MAPPING: Record<
   T_A_E_S_5: "Id_Asistencia_Escolar_Mensual",
 
   T_Vacaciones_Interescolares: "Id_Vacacion_Interescolar",
+  
 };
 
 /**
@@ -116,6 +120,7 @@ export const RDP03_APP_TO_MONGODB_ID_MAPPING: Record<RDP03_Campos_ID, "_id"> = {
   Id_Directivo: "_id",
   Id_Personal_Administrativo: "_id",
   Id_Vacacion_Interescolar: "_id",
+  Id_Modificacion_Especifica: "_id"
 };
 
 /**

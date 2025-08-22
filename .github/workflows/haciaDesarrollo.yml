@@ -25,7 +25,7 @@ jobs:
           echo "Configurando repositorio de destino..."
           mkdir -p temp-external-repo
           cd temp-external-repo
-          git clone https://x-access-token:${{ secrets.SIASIS_API02_INS1_REPOSITORIO_CERTIFICACION_PAT }}@github.com/SIASIS-API02-DEV-INS1/API02.git .
+          git clone https://x-access-token:${{ secrets.SIASIS_API02_INS1_REPOSITORIO_DESARROLLO_PAT }}@github.com/SIASIS-API02-DEV/API02.git .
           
           echo "Limpiando repositorio destino (excepto .git)..."
           find . -mindepth 1 -maxdepth 1 -not -path "./.git" -exec rm -rf {} \;
@@ -59,7 +59,7 @@ jobs:
           echo "Configurando repositorio de destino 2..."
           mkdir -p temp-repo2
           cd temp-repo2
-          git clone https://x-access-token:${{ secrets.SIASIS_API02_INS2_REPOSITORIO_CERTIFICACION_PAT }}@github.com/SIASIS-API02-DEV-INS2/API02.git .
+          git clone https://x-access-token:${{ secrets.SIASIS_API02_INS23_REPOSITORIO_DESARROLLO_PAT }}@github.com/SIASIS-API02-DEV-INS2/API02.git .
 
           echo "Limpiando repositorio destino 2 (excepto .git)..."
           find . -mindepth 1 -maxdepth 1 -not -path "./.git" -exec rm -rf {} \;

@@ -319,3 +319,18 @@ model T_Vacaciones_Interescolares {
 
   @@map("T_Vacaciones_Interescolares")
 }
+
+model T_Modificaciones_Especificas {
+  Id_Modificacion_Especifica     String   @id @default(auto()) @map("_id") @db.ObjectId
+  Nombre_Tabla                   String   
+  Campos_Identificadores         String   
+  Valores_Campos_Identificadores String   
+  Id_Registro_Modificado         String
+  Fecha_Modificacion             DateTime @default(now())
+  Ultima_Operacion               String   // INSERT, UPDATE, DELETE
+  Contador_Modificaciones        Int      @default(1)
+
+  // Índice compuesto único para evitar duplicados
+  @@unique([Nombre_Tabla, Campos_Identificadores, Valores_Campos_Identificadores])
+  @@map("T_Modificaciones_Especificas")
+}
