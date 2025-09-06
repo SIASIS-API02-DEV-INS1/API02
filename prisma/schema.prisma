@@ -185,7 +185,7 @@ model T_A_E_P_1 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
   Id_Estudiante                String
   Mes                           Int
-  Estados                       String
+  Asistencias_Mensuales                       String
   estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_1")
@@ -195,7 +195,7 @@ model T_A_E_P_2 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
   Id_Estudiante                String
   Mes                           Int
-  Estados                       String
+  Asistencias_Mensuales                       String
   estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_2")
@@ -205,7 +205,7 @@ model T_A_E_P_3 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
   Id_Estudiante                String
   Mes                           Int
-  Estados                       String
+  Asistencias_Mensuales                       String
   estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_3")
@@ -215,7 +215,7 @@ model T_A_E_P_4 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
   Id_Estudiante                String
   Mes                           Int
-  Estados                       String
+  Asistencias_Mensuales                       String
   estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_4")
@@ -225,7 +225,7 @@ model T_A_E_P_5 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
   Id_Estudiante                String
   Mes                           Int
-  Estados                       String
+  Asistencias_Mensuales                       String
   estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_5")
@@ -235,7 +235,7 @@ model T_A_E_P_6 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
   Id_Estudiante                String
   Mes                           Int
-  Estados                       String
+  Asistencias_Mensuales                       String
   estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_P_6")
@@ -247,7 +247,7 @@ model T_A_E_S_1 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
   Id_Estudiante                String
   Mes                           Int
-  Estados                       String
+  Asistencias_Mensuales                       String
   estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_S_1")
@@ -257,7 +257,7 @@ model T_A_E_S_2 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
   Id_Estudiante                String
   Mes                           Int
-  Estados                       String
+  Asistencias_Mensuales                       String
   estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_S_2")
@@ -267,7 +267,7 @@ model T_A_E_S_3 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
   Id_Estudiante                String
   Mes                           Int
-  Estados                       String
+  Asistencias_Mensuales                       String
   estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_S_3")
@@ -277,7 +277,7 @@ model T_A_E_S_4 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
   Id_Estudiante                String
   Mes                           Int
-  Estados                       String
+  Asistencias_Mensuales                       String
   estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_S_4")
@@ -287,7 +287,7 @@ model T_A_E_S_5 {
   Id_Asistencia_Escolar_Mensual String        @id @default(auto()) @map("_id") @db.ObjectId
   Id_Estudiante                String
   Mes                           Int
-  Estados                       String
+  Asistencias_Mensuales                       String
   estudiante                    T_Estudiantes @relation(fields: [Id_Estudiante], references: [Id_Estudiante], onDelete: Cascade)
 
   @@map("T_A_E_S_5")

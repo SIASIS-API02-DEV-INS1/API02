@@ -1,10 +1,4 @@
-import { T_Estudiantes } from "@prisma/client";
-
-
-// Interfaz para la respuesta de estudiantes
-export interface EstudianteDelResponsable extends T_Estudiantes {
-  Tipo_Relacion: string;
-}
+import { EstudianteDelResponsable } from "../../../Estudiantes";
 
 export interface MisEstudiantesRelacionadosSuccessResponseAPI02 {
   success: true;
@@ -16,4 +10,5 @@ export interface MisEstudiantesRelacionadosErrorResponseAPI02 {
   success: false;
   message: string;
   errorType: string;
-  details?: any;}
+  details?: any;
+}

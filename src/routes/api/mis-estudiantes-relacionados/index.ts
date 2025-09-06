@@ -7,10 +7,14 @@ import {
   TokenErrorTypes,
 } from "../../../interfaces/shared/errors";
 import { obtenerEstudiantesRelacionadosParaResponsable } from "../../../../core/databases/queries/RDP03/estudiantes/obtenerEstudiantesRelacionadosParaResponsable";
-import { EstudianteDelResponsable, MisEstudiantesRelacionadosErrorResponseAPI02, MisEstudiantesRelacionadosSuccessResponseAPI02 } from "../../../interfaces/shared/apis/api02/mis-estudiantes-relacionados/types";
+import {
+  MisEstudiantesRelacionadosErrorResponseAPI02,
+  MisEstudiantesRelacionadosSuccessResponseAPI02,
+} from "../../../interfaces/shared/apis/api02/mis-estudiantes-relacionados/types";
+import EstudianteEspecificoRouter from "./[Id_Estudiante]";
+import { EstudianteDelResponsable } from "../../../interfaces/shared/Estudiantes";
 
 const router = Router();
-
 
 // Ruta para obtener todos los estudiantes relacionados al responsable
 router.get("/", (async (req: Request, res: Response) => {
@@ -37,8 +41,8 @@ router.get("/", (async (req: Request, res: Response) => {
     );
 
     // Transformar la respuesta para usar Id_Estudiante en lugar de Id_Estudiante
-    const estudiantesTransformados: EstudianteDelResponsable[] = estudiantes.map(
-      (estudiante) => ({
+    const estudiantesTransformados: EstudianteDelResponsable[] =
+      estudiantes.map((estudiante) => ({
         Id_Estudiante: estudiante.Id_Estudiante, // Mapear Id_Estudiante a Id_Estudiante
         Nombres: estudiante.Nombres,
         Apellidos: estudiante.Apellidos,
@@ -47,8 +51,7 @@ router.get("/", (async (req: Request, res: Response) => {
         Tipo_Relacion: estudiante.Tipo_Relacion,
         // Si existe Google_Drive_Foto_ID en la consulta, incluirlo
         Google_Drive_Foto_ID: (estudiante as any).Google_Drive_Foto_ID || null,
-      })
-    );
+      }));
 
     return res.status(200).json({
       success: true,
@@ -65,5 +68,7 @@ router.get("/", (async (req: Request, res: Response) => {
     } as MisEstudiantesRelacionadosErrorResponseAPI02);
   }
 }) as any);
+
+router.use(EstudianteEspecificoRouter);
 
 export default router;
