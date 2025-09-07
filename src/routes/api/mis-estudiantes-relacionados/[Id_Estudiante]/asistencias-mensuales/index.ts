@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 
 import {
-  MisEstudianteRelacionadoAsistenciasMensuales,
+  MisEstudianteRelacionadoAsistenciasMensualesSuccessResponse,
   MisEstudianteRelacionadoAsistenciasMensualesErrorAPI02,
 } from "../../../../../interfaces/shared/apis/api02/mis-estudiantes-relacionados/asistencias-mensuales/types";
 import {
@@ -17,6 +17,7 @@ import { NivelEducativo } from "../../../../../interfaces/shared/NivelEducativo"
 
 import {
   DataConflictErrorTypes,
+  DataErrorTypes,
   SystemErrorTypes,
   TokenErrorTypes,
   UserErrorTypes,
@@ -84,7 +85,7 @@ router.get("/:Id_Estudiante/asistencias-mensuales", (async (
       return res.status(404).json({
         success: false,
         message: "El estudiante no fue encontrado",
-        errorType: UserErrorTypes.USER_NOT_FOUND,
+        errorType: DataErrorTypes.MISSING_DATA,
       } as MisEstudianteRelacionadoAsistenciasMensualesErrorAPI02);
     }
 
@@ -118,13 +119,13 @@ router.get("/:Id_Estudiante/asistencias-mensuales", (async (
       rdp03EnUso
     );
 
-    // Si no hay asistencias para el mes, devolver objeto vacío
+    // Si no hay asistencias para el mes, devolver 404
     if (!asistenciasString) {
-      return res.status(200).json({
-        success: true,
-        data: {},
-        total: 0,
-      } as MisEstudianteRelacionadoAsistenciasMensuales);
+      return res.status(404).json({
+        success: false,
+        message: `No se encontraron registros de asistencia para el estudiante en el mes ${mesConsulta}`,
+        errorType: UserErrorTypes.USER_NOT_FOUND,
+      } as MisEstudianteRelacionadoAsistenciasMensualesErrorAPI02);
     }
 
     // Determinar si incluir salidas según el nivel del estudiante
@@ -139,11 +140,25 @@ router.get("/:Id_Estudiante/asistencias-mensuales", (async (
       incluirSalidas
     );
 
+    // Verificar si el objeto parseado tiene contenido
+    const totalRegistros = Object.keys(asistenciasParsedas).length;
+
+    if (totalRegistros === 0) {
+      return res.status(404).json({
+        success: false,
+        message: `No se encontraron asistencias válidas para el estudiante en el mes ${mesConsulta}`,
+        errorType: UserErrorTypes.USER_NOT_FOUND,
+      } as MisEstudianteRelacionadoAsistenciasMensualesErrorAPI02);
+    }
+
     return res.status(200).json({
       success: true,
-      data: asistenciasParsedas,
-      total: Object.keys(asistenciasParsedas).length,
-    } as MisEstudianteRelacionadoAsistenciasMensuales);
+      data: {
+        Mes: mesConsulta,
+        Asistencias: asistenciasParsedas,
+      },
+      total: totalRegistros,
+    } as MisEstudianteRelacionadoAsistenciasMensualesSuccessResponse);
   } catch (error) {
     console.error(
       "Error al obtener asistencias mensuales del estudiante:",

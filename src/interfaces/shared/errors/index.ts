@@ -148,6 +148,7 @@ export enum DataErrorTypes {
   INVALID_DATA_FORMAT = "INVALID_DATA_FORMAT", // 🆕 Formato de datos inválido
   DATA_CORRUPTED = "DATA_CORRUPTED", // 🆕 Datos corruptos
   DATA_INCONSISTENT = "DATA_INCONSISTENT", // 🆕 Datos inconsistentes
+  MISSING_DATA = "MISSING_DATA", // 🆕 Datos faltantes
 }
 
 /**

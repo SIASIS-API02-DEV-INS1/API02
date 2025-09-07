@@ -1,9 +1,12 @@
 import { AsistenciaEscolarDeUnDia } from "../../../../AsistenciasEscolares";
 
-export interface MisEstudianteRelacionadoAsistenciasMensuales {
-    success: true;
-    data: Record<number, AsistenciaEscolarDeUnDia>;
-    total: number;
+export interface MisEstudianteRelacionadoAsistenciasMensualesSuccessResponse {
+  success: true;
+  data: {
+    Mes: number;
+    Asistencias: Record<number, AsistenciaEscolarDeUnDia>;
+  };
+  total: number;
 }
 
 export interface MisEstudianteRelacionadoAsistenciasMensualesErrorAPI02 {
