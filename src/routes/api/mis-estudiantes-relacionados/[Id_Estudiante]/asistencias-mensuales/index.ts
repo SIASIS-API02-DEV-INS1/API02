@@ -124,7 +124,7 @@ router.get("/:Id_Estudiante/asistencias-mensuales", (async (
       return res.status(404).json({
         success: false,
         message: `No se encontraron registros de asistencia para el estudiante en el mes ${mesConsulta}`,
-        errorType: UserErrorTypes.USER_NOT_FOUND,
+        errorType: DataErrorTypes.MISSING_DATA,
       } as MisEstudianteRelacionadoAsistenciasMensualesErrorAPI02);
     }
 
@@ -147,7 +147,7 @@ router.get("/:Id_Estudiante/asistencias-mensuales", (async (
       return res.status(404).json({
         success: false,
         message: `No se encontraron asistencias válidas para el estudiante en el mes ${mesConsulta}`,
-        errorType: UserErrorTypes.USER_NOT_FOUND,
+        errorType: DataErrorTypes.MISSING_DATA,
       } as MisEstudianteRelacionadoAsistenciasMensualesErrorAPI02);
     }
 
