@@ -37,47 +37,47 @@ router.get("/", (async (req: Request, res: Response) => {
     }
 
     // Obtener parámetros de consulta
-    const { idProfesor, nivel } = req.query;
+    const { Id_Profesor, Nivel } = req.query;
 
     // Validar parámetros obligatorios
-    if (!idProfesor || typeof idProfesor !== "string") {
+    if (!Id_Profesor || typeof Id_Profesor !== "string") {
       return res.status(400).json({
         success: false,
         message:
-          "El parámetro idProfesor es obligatorio y debe ser una cadena válida",
+          "El parámetro Id_Profesor es obligatorio y debe ser una cadena válida",
         errorType: ValidationErrorTypes.REQUIRED_FIELDS,
       } as ProfesorConAulaErrorAPI02);
     }
 
-    if (!nivel || typeof nivel !== "string") {
+    if (!Nivel || typeof Nivel !== "string") {
       return res.status(400).json({
         success: false,
         message:
-          "El parámetro nivel es obligatorio y debe ser una cadena válida",
+          "El parámetro Nivel es obligatorio y debe ser una cadena válida",
         errorType: ValidationErrorTypes.REQUIRED_FIELDS,
       } as ProfesorConAulaErrorAPI02);
     }
 
-    // Validar que el nivel sea válido
+    // Validar que el Nivel sea válido
     if (
       ![NivelEducativo.PRIMARIA, NivelEducativo.SECUNDARIA].includes(
-        nivel as any
+        Nivel as any
       )
     ) {
       return res.status(400).json({
         success: false,
-        message: `El nivel debe ser "${NivelEducativo.PRIMARIA}" para primaria o "${NivelEducativo.SECUNDARIA}" para secundaria`,
+        message: `El Nivel debe ser "${NivelEducativo.PRIMARIA}" para primaria o "${NivelEducativo.SECUNDARIA}" para secundaria`,
         errorType: ValidationErrorTypes.INVALID_ENUM_VALUE,
       } as ProfesorConAulaErrorAPI02);
     }
 
     let profesor;
 
-    // Consultar según el nivel educativo
-    if (nivel === NivelEducativo.PRIMARIA) {
-      profesor = await obtenerProfesorPrimaria(idProfesor, rdp03EnUso!);
-    } else if (nivel === NivelEducativo.SECUNDARIA) {
-      profesor = await obtenerProfesorSecundaria(idProfesor, rdp03EnUso!);
+    // Consultar según el Nivel educativo
+    if (Nivel === NivelEducativo.PRIMARIA) {
+      profesor = await obtenerProfesorPrimaria(Id_Profesor, rdp03EnUso!);
+    } else if (Nivel === NivelEducativo.SECUNDARIA) {
+      profesor = await obtenerProfesorSecundaria(Id_Profesor, rdp03EnUso!);
     }
 
     // Verificar si se encontró el profesor
@@ -85,7 +85,7 @@ router.get("/", (async (req: Request, res: Response) => {
       return res.status(404).json({
         success: false,
         message: `No se encontró ningún profesor ${
-          nivel === NivelEducativo.PRIMARIA ? "de primaria" : "de secundaria"
+          Nivel === NivelEducativo.PRIMARIA ? "de primaria" : "de secundaria"
         } con el ID proporcionado o el profesor no está activo`,
         errorType: UserErrorTypes.USER_NOT_FOUND,
       } as ProfesorConAulaErrorAPI02);
