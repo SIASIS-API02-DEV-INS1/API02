@@ -12,7 +12,7 @@ import { RolesSistema } from "./RolesSistema";
 export type DirectivoGenerico = Pick<
   T_Directivos,
   | "Id_Directivo"
-  | "Id"
+  | "Identificador_Nacional"
   | "Nombres"
   | "Apellidos"
   | "Genero"
@@ -56,8 +56,6 @@ export type PersonalAdministrativoGenerico = Pick<
   T_Personal_Administrativo,
   "Id_Personal_Administrativo" | "Nombres" | "Apellidos" | "Genero"
 >;
-
-
 
 export interface GenericUser {
   ID_O_Id_Usuario: string;

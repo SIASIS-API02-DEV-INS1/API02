@@ -25,8 +25,7 @@ import isTutorAuthenticated from "../middlewares/isTutorAuthenticated";
 import isAuxiliarAuthenticated from "../middlewares/isAuxiliarAuthenticated";
 import isPersonalAdministrativoAuthenticated from "../middlewares/isPersonalAdministrativoAuthenticated";
 import aulasRouter from "./api/aulas";
-
-
+import profesoresConAulaRouter from "./api/profesores-con-aula";
 
 const router = Router();
 
@@ -80,8 +79,16 @@ router.use(
   estudiantesRelacionadosRouter
 );
 
-router.use("/eventos", decodedRol , eventosRouter);
+router.use("/eventos", decodedRol, eventosRouter);
 
-router.use("/aulas", decodedRol, aulasRouter )
+router.use("/aulas", decodedRol, aulasRouter);
+
+router.use(
+  "/profesores-con-aula",
+  decodedRol,
+  isResponsableAuthenticated,
+  checkAuthentication as any,
+  profesoresConAulaRouter
+);
 
 export default router;
