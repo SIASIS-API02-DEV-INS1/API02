@@ -4,7 +4,7 @@ export interface MisEstudianteRelacionadoAsistenciasMensualesSuccessResponse {
   success: true;
   data: {
     Mes: number;
-    Asistencias: Record<number, AsistenciaEscolarDeUnDia>;
+    Asistencias: Record<number, AsistenciaEscolarDeUnDia | null>;
   };
   total: number;
 }

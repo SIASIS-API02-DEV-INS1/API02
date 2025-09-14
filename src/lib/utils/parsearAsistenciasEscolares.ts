@@ -3,17 +3,26 @@ import { ModoRegistro } from "../../interfaces/shared/ModoRegistroPersonal";
 
 /**
  * Parsea las asistencias del string JSON y las convierte al formato requerido
+ * Ahora maneja días con valor null (estado inactivo)
  */
 export function parsearAsistenciasEscolares(
   asistenciasString: string,
   incluirSalidas: boolean
-): Record<number, AsistenciaEscolarDeUnDia> {
+): Record<number, AsistenciaEscolarDeUnDia | null> {
   try {
     const asistencias = JSON.parse(asistenciasString);
-    const resultado: Record<number, AsistenciaEscolarDeUnDia> = {};
+    const resultado: Record<number, AsistenciaEscolarDeUnDia | null> = {};
 
     for (const [dia, registros] of Object.entries(asistencias)) {
       const diaNumero = parseInt(dia);
+
+      // NUEVO: Manejar caso de día inactivo (valor null)
+      if (registros === null) {
+        resultado[diaNumero] = null;
+        continue;
+      }
+
+      // Procesar día con datos (lógica existente)
       const registrosAsistencia = registros as any;
 
       const asistenciaDia: AsistenciaEscolarDeUnDia = {
