@@ -6,7 +6,7 @@ import {
   SystemErrorTypes,
   TokenErrorTypes,
 } from "../../../interfaces/shared/errors";
-import {  ErrorResponseAPIBase } from "../../../interfaces/shared/apis/types";
+import { ErrorResponseAPIBase } from "../../../interfaces/shared/apis/types";
 import { validarGradoPorNivel } from "../../../lib/helpers/validators/data/validateGrado";
 import { NivelEducativo } from "../../../interfaces/shared/NivelEducativo";
 import { validarNivelEducativo } from "../../../lib/helpers/validators/data/validateNivelEducativo";
@@ -16,11 +16,15 @@ import { GetAulasSuccessResponse } from "../../../interfaces/shared/apis/api02/a
 import { GRADOS_EDUCATIVOS_POR_NIVELES } from "../../../constants/GRADOS_EDUCATIVOS_POR_NIVELES";
 import { obtenerAulas } from "../../../../core/databases/queries/RDP03/aulas/obtenerAulas";
 
+import AsistenciasEscolaresMensualesDeUnAulaRouter from "./[Id_Aula]/asistencias-escolares-mensuales";
+
 const router = Router();
 
 // Constantes para validación
-export const GRADO_MAXIMO_PRIMARIA = GRADOS_EDUCATIVOS_POR_NIVELES[NivelEducativo.PRIMARIA].Maximo;
-export const GRADO_MAXIMO_SECUNDARIA = GRADOS_EDUCATIVOS_POR_NIVELES[NivelEducativo.SECUNDARIA].Maximo;
+export const GRADO_MAXIMO_PRIMARIA =
+  GRADOS_EDUCATIVOS_POR_NIVELES[NivelEducativo.PRIMARIA].Maximo;
+export const GRADO_MAXIMO_SECUNDARIA =
+  GRADOS_EDUCATIVOS_POR_NIVELES[NivelEducativo.SECUNDARIA].Maximo;
 
 // Función para parsear IDs de aulas
 function parsearIdsAulas(idsString: string): string[] {
@@ -31,8 +35,11 @@ function parsearIdsAulas(idsString: string): string[] {
 }
 
 // Ruta principal para obtener aulas
-router.get("/", isResponsableAuthenticated , checkAuthentication, (async (req: Request, res: Response) => {
- try {
+router.get("/", isResponsableAuthenticated, checkAuthentication, (async (
+  req: Request,
+  res: Response
+) => {
+  try {
     const Rol = req.userRole!;
     // const userData = req.user! as ResponsableAuthenticated;
     const rdp03EnUso = req.RDP03_INSTANCE;
@@ -57,7 +64,8 @@ router.get("/", isResponsableAuthenticated , checkAuthentication, (async (req: R
       if (typeof idsAulas !== "string") {
         return res.status(400).json({
           success: false,
-          message: "El parámetro 'aulas' debe ser una cadena de IDs separados por comas",
+          message:
+            "El parámetro 'aulas' debe ser una cadena de IDs separados por comas",
           errorType: RequestErrorTypes.INVALID_PARAMETERS,
         } as ErrorResponseAPIBase);
       }
@@ -79,7 +87,9 @@ router.get("/", isResponsableAuthenticated , checkAuthentication, (async (req: R
       if (!nivel || typeof nivel !== "string") {
         return res.status(400).json({
           success: false,
-          message: `El parámetro 'nivel' es obligatorio cuando no se especifican aulas. Valores válidos: ${Object.values(NivelEducativo).join(", ")}`,
+          message: `El parámetro 'nivel' es obligatorio cuando no se especifican aulas. Valores válidos: ${Object.values(
+            NivelEducativo
+          ).join(", ")}`,
           errorType: RequestErrorTypes.MISSING_REQUIRED_PARAMETERS,
         } as ErrorResponseAPIBase);
       }
@@ -87,7 +97,9 @@ router.get("/", isResponsableAuthenticated , checkAuthentication, (async (req: R
       if (!validarNivelEducativo(nivel)) {
         return res.status(400).json({
           success: false,
-          message: `Nivel inválido. Valores válidos: ${Object.values(NivelEducativo).join(", ")} (P=Primaria, S=Secundaria)`,
+          message: `Nivel inválido. Valores válidos: ${Object.values(
+            NivelEducativo
+          ).join(", ")} (P=Primaria, S=Secundaria)`,
           errorType: RequestErrorTypes.INVALID_PARAMETERS,
         } as ErrorResponseAPIBase);
       }
@@ -97,7 +109,8 @@ router.get("/", isResponsableAuthenticated , checkAuthentication, (async (req: R
       if (nivel && typeof nivel === "string") {
         return res.status(400).json({
           success: false,
-          message: "El parámetro 'nivel' no es válido cuando se especifican aulas específicas",
+          message:
+            "El parámetro 'nivel' no es válido cuando se especifican aulas específicas",
           errorType: RequestErrorTypes.INVALID_PARAMETERS,
         } as ErrorResponseAPIBase);
       }
@@ -124,8 +137,12 @@ router.get("/", isResponsableAuthenticated , checkAuthentication, (async (req: R
       }
 
       if (!validarGradoPorNivel(nivelValidado as NivelEducativo, gradoParsed)) {
-        const gradoMaximo = nivelValidado === NivelEducativo.PRIMARIA ? GRADO_MAXIMO_PRIMARIA : GRADO_MAXIMO_SECUNDARIA;
-        const nivelTexto = nivelValidado === NivelEducativo.PRIMARIA ? "Primaria" : "Secundaria";
+        const gradoMaximo =
+          nivelValidado === NivelEducativo.PRIMARIA
+            ? GRADO_MAXIMO_PRIMARIA
+            : GRADO_MAXIMO_SECUNDARIA;
+        const nivelTexto =
+          nivelValidado === NivelEducativo.PRIMARIA ? "Primaria" : "Secundaria";
         return res.status(400).json({
           success: false,
           message: `Grado inválido para ${nivelTexto}. Rango válido: 1-${gradoMaximo}`,
@@ -136,7 +153,8 @@ router.get("/", isResponsableAuthenticated , checkAuthentication, (async (req: R
       // Si se proporciona grado pero no nivel (cuando hay aulas específicas), mostrar error
       return res.status(400).json({
         success: false,
-        message: "El parámetro 'grado' no es válido cuando se especifican aulas específicas",
+        message:
+          "El parámetro 'grado' no es válido cuando se especifican aulas específicas",
         errorType: RequestErrorTypes.INVALID_PARAMETERS,
       } as ErrorResponseAPIBase);
     }
@@ -164,5 +182,7 @@ router.get("/", isResponsableAuthenticated , checkAuthentication, (async (req: R
     } as ErrorResponseAPIBase);
   }
 }) as any);
+
+router.use(AsistenciasEscolaresMensualesDeUnAulaRouter);
 
 export default router;
