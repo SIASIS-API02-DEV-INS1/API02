@@ -26,6 +26,7 @@ import isAuxiliarAuthenticated from "../middlewares/isAuxiliarAuthenticated";
 import isPersonalAdministrativoAuthenticated from "../middlewares/isPersonalAdministrativoAuthenticated";
 import aulasRouter from "./api/aulas";
 import profesoresConAulaRouter from "./api/profesores-con-aula";
+import misAulaRouter from "./api/mi-aula";
 
 const router = Router();
 
@@ -89,6 +90,15 @@ router.use(
   isResponsableAuthenticated,
   checkAuthentication as any,
   profesoresConAulaRouter
+);
+
+router.use(
+  "/mi-aula",
+  decodedRol,
+  isProfesorPrimariaAuthenticated,
+  isTutorAuthenticated,
+  checkAuthentication as any,
+  misAulaRouter
 );
 
 export default router;
