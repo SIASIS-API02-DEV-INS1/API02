@@ -21,7 +21,7 @@ import { obtenerDatosAula } from "../../../../../../core/databases/queries/RDP03
 import { obtenerTablaAsistenciasEscolaresPorNivelYGrado } from "../../../../../lib/utils/obtenerTablaAsistenciasEscolaresPorNivelYGrado";
 import { obtenerAsistenciasMensualesDeAula } from "../../../../../../core/databases/queries/RDP03/aulas/obtenerAsistenciasMensualesDeAula";
 import { parsearAsistenciasEscolares } from "../../../../../lib/utils/parsearAsistenciasEscolares";
-import { GetAsistenciasMensualesDeUnAulaSuccessResponse } from "../../../../../interfaces/shared/apis/api02/aulas/asistencias-escolares-mensuales/tpyes";
+import { GetAsistenciasMensualesDeUnAulaSuccessResponse } from "../../../../../interfaces/shared/apis/api02/aulas/asistencias-escolares-mensuales/types";
 
 const router = Router();
 
