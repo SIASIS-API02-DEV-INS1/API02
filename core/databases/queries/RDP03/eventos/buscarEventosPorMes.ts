@@ -3,6 +3,109 @@ import { executeMongoOperation } from "../../../connectors/mongodb";
 import { RolesSistema } from "../../../../../src/interfaces/shared/RolesSistema";
 import { T_Eventos } from "@prisma/client";
 
+interface BuscarEventosParams {
+  mes?: number;
+  año?: number;
+  limit: number;
+  offset: number;
+}
+
+/**
+ * Busca eventos con filtros opcionales y paginación
+ * @param params Parámetros de búsqueda
+ * @param instanciaEnUso Instancia específica donde ejecutar la consulta (opcional)
+ * @returns Objeto con array de eventos y total de eventos encontrados
+ */
+export async function buscarEventos(
+  params: BuscarEventosParams,
+  instanciaEnUso?: RDP03
+): Promise<{ eventos: T_Eventos[]; total: number }> {
+  try {
+    const { mes, año, limit, offset } = params;
+
+    let filtroComun: any = {};
+
+    // Si se especifica mes, filtrar por ese mes
+    if (mes !== undefined) {
+      const añoConsulta = año || new Date().getFullYear();
+
+      // Crear fechas de inicio y fin del mes para la consulta
+      const inicioMes = new Date(añoConsulta, mes - 1, 1);
+      const finMes = new Date(añoConsulta, mes, 0);
+      finMes.setHours(23, 59, 59, 999);
+
+      filtroComun = {
+        $or: [
+          // Eventos que inician en el mes consultado
+          {
+            $and: [
+              { Fecha_Inicio: { $gte: inicioMes } },
+              { Fecha_Inicio: { $lte: finMes } },
+            ],
+          },
+          // Eventos que terminan en el mes consultado
+          {
+            $and: [
+              { Fecha_Conclusion: { $gte: inicioMes } },
+              { Fecha_Conclusion: { $lte: finMes } },
+            ],
+          },
+          // Eventos que abarcan todo el mes
+          {
+            $and: [
+              { Fecha_Inicio: { $lte: inicioMes } },
+              { Fecha_Conclusion: { $gte: finMes } },
+            ],
+          },
+        ],
+      };
+    }
+    // Si no se especifica mes, traer todos los eventos (sin filtro adicional)
+
+    // Contar el total de eventos que coinciden con el filtro
+    const total = await executeMongoOperation<number>(
+      instanciaEnUso,
+      {
+        operation: "countDocuments",
+        collection: "T_Eventos",
+        filter: filtroComun,
+      },
+      RolesSistema.Responsable
+    );
+
+    // Obtener los eventos con paginación
+    const eventos = await executeMongoOperation<T_Eventos[]>(
+      instanciaEnUso,
+      {
+        operation: "find",
+        collection: "T_Eventos",
+        filter: filtroComun,
+        options: {
+          sort: { Fecha_Inicio: 1 }, // Ordenar por fecha de inicio ascendente
+          skip: offset,
+          limit: limit,
+          projection: {
+            Id_Evento: 1,
+            Nombre: 1,
+            Fecha_Inicio: 1,
+            Fecha_Conclusion: 1,
+            _id: 0,
+          },
+        },
+      },
+      RolesSistema.Responsable
+    );
+
+    return {
+      eventos: eventos || [],
+      total: total || 0,
+    };
+  } catch (error) {
+    console.error("Error buscando eventos:", error);
+    throw error;
+  }
+}
+
 /**
  * Busca eventos que ocurren en un mes específico con paginación
  * @param mes Mes a consultar (1-12)
