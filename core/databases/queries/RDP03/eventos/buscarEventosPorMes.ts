@@ -3,19 +3,22 @@ import { executeMongoOperation } from "../../../connectors/mongodb";
 import { RolesSistema } from "../../../../../src/interfaces/shared/RolesSistema";
 import { T_Eventos } from "@prisma/client";
 
-
 /**
- * Busca eventos que ocurren en un mes específico
+ * Busca eventos que ocurren en un mes específico con paginación
  * @param mes Mes a consultar (1-12)
  * @param año Año a consultar (opcional, por defecto año actual)
  * @param instanciaEnUso Instancia específica donde ejecutar la consulta (opcional)
- * @returns Array de eventos que ocurren en el mes especificado
+ * @param limit Cantidad máxima de eventos a retornar
+ * @param offset Cantidad de eventos a saltar
+ * @returns Objeto con array de eventos y total de eventos encontrados
  */
 export async function buscarEventosPorMes(
   mes: number,
   año?: number,
-  instanciaEnUso?: RDP03
-): Promise<T_Eventos[]> {
+  instanciaEnUso?: RDP03,
+  limit: number = 100,
+  offset: number = 0
+): Promise<{ eventos: T_Eventos[]; total: number }> {
   try {
     const añoConsulta = año || new Date().getFullYear();
 
@@ -24,53 +27,73 @@ export async function buscarEventosPorMes(
     const finMes = new Date(añoConsulta, mes, 0); // Último día del mes
     finMes.setHours(23, 59, 59, 999); // Incluir todo el último día
 
+    // Definir el filtro común para ambas operaciones
+    const filtroComun = {
+      $or: [
+        // Eventos que inician en el mes consultado
+        {
+          $and: [
+            { Fecha_Inicio: { $gte: inicioMes } },
+            { Fecha_Inicio: { $lte: finMes } },
+          ],
+        },
+        // Eventos que terminan en el mes consultado
+        {
+          $and: [
+            { Fecha_Conclusion: { $gte: inicioMes } },
+            { Fecha_Conclusion: { $lte: finMes } },
+          ],
+        },
+        // Eventos que abarcan todo el mes (inician antes y terminan después)
+        {
+          $and: [
+            { Fecha_Inicio: { $lte: inicioMes } },
+            { Fecha_Conclusion: { $gte: finMes } },
+          ],
+        },
+      ],
+    };
+
+    // Contar el total de eventos que coinciden con el filtro
+    const total = await executeMongoOperation<number>(
+      instanciaEnUso,
+      {
+        operation: "countDocuments",
+        collection: "T_Eventos",
+        filter: filtroComun,
+      },
+      RolesSistema.Responsable
+    );
+
+    // Obtener los eventos con paginación
     const eventos = await executeMongoOperation<T_Eventos[]>(
       instanciaEnUso,
       {
-        operation: 'find',
-        collection: 'T_Eventos',
-        filter: {
-          $or: [
-            // Eventos que inician en el mes consultado
-            {
-              $and: [
-                { Fecha_Inicio: { $gte: inicioMes } },
-                { Fecha_Inicio: { $lte: finMes } }
-              ]
-            },
-            // Eventos que terminan en el mes consultado
-            {
-              $and: [
-                { Fecha_Conclusion: { $gte: inicioMes } },
-                { Fecha_Conclusion: { $lte: finMes } }
-              ]
-            },
-            // Eventos que abarcan todo el mes (inician antes y terminan después)
-            {
-              $and: [
-                { Fecha_Inicio: { $lte: inicioMes } },
-                { Fecha_Conclusion: { $gte: finMes } }
-              ]
-            }
-          ]
-        },
+        operation: "find",
+        collection: "T_Eventos",
+        filter: filtroComun,
         options: {
           sort: { Fecha_Inicio: 1 }, // Ordenar por fecha de inicio ascendente
+          skip: offset,
+          limit: limit,
           projection: {
             Id_Evento: 1,
             Nombre: 1,
             Fecha_Inicio: 1,
             Fecha_Conclusion: 1,
-            _id: 0 // Excluir el _id de MongoDB para mantener compatibilidad
-          }
-        }
+            _id: 0, // Excluir el _id de MongoDB para mantener compatibilidad
+          },
+        },
       },
       RolesSistema.Responsable // Los responsables pueden ver eventos
     );
 
-    return eventos || [];
+    return {
+      eventos: eventos || [],
+      total: total || 0,
+    };
   } catch (error) {
-    console.error('Error buscando eventos por mes:', error);
+    console.error("Error buscando eventos por mes:", error);
     throw error;
   }
 }
@@ -87,12 +110,12 @@ export function verificarConflictoConEventos(
   fechaFin: Date,
   eventos: T_Eventos[]
 ): T_Eventos[] {
-  return eventos.filter(evento => {
+  return eventos.filter((evento) => {
     const inicioEvento = new Date(evento.Fecha_Inicio);
     const finEvento = new Date(evento.Fecha_Conclusion);
 
     return (
-      (inicioEvento <= fechaFin && finEvento >= fechaInicio) // Cualquier traslape
+      inicioEvento <= fechaFin && finEvento >= fechaInicio // Cualquier traslape
     );
   });
 }
@@ -114,31 +137,31 @@ export async function buscarEventosPorAño(
     const eventos = await executeMongoOperation<T_Eventos[]>(
       instanciaEnUso,
       {
-        operation: 'find',
-        collection: 'T_Eventos',
+        operation: "find",
+        collection: "T_Eventos",
         filter: {
           $or: [
             // Eventos que ocurren durante el año
             {
               $and: [
                 { Fecha_Inicio: { $gte: inicioAño } },
-                { Fecha_Inicio: { $lte: finAño } }
-              ]
+                { Fecha_Inicio: { $lte: finAño } },
+              ],
             },
             {
               $and: [
                 { Fecha_Conclusion: { $gte: inicioAño } },
-                { Fecha_Conclusion: { $lte: finAño } }
-              ]
+                { Fecha_Conclusion: { $lte: finAño } },
+              ],
             },
             // Eventos que abarcan todo el año
             {
               $and: [
                 { Fecha_Inicio: { $lte: inicioAño } },
-                { Fecha_Conclusion: { $gte: finAño } }
-              ]
-            }
-          ]
+                { Fecha_Conclusion: { $gte: finAño } },
+              ],
+            },
+          ],
         },
         options: {
           sort: { Fecha_Inicio: 1 },
@@ -147,16 +170,16 @@ export async function buscarEventosPorAño(
             Nombre: 1,
             Fecha_Inicio: 1,
             Fecha_Conclusion: 1,
-            _id: 0
-          }
-        }
+            _id: 0,
+          },
+        },
       },
       RolesSistema.Directivo // Solo directivos pueden ver eventos completos del año
     );
 
     return eventos || [];
   } catch (error) {
-    console.error('Error buscando eventos por año:', error);
+    console.error("Error buscando eventos por año:", error);
     throw error;
   }
 }
@@ -177,32 +200,32 @@ export async function buscarEventosPorRango(
     const eventos = await executeMongoOperation<T_Eventos[]>(
       instanciaEnUso,
       {
-        operation: 'find',
-        collection: 'T_Eventos',
+        operation: "find",
+        collection: "T_Eventos",
         filter: {
           $or: [
             // Eventos que inician en el rango
             {
               $and: [
                 { Fecha_Inicio: { $gte: fechaInicio } },
-                { Fecha_Inicio: { $lte: fechaFin } }
-              ]
+                { Fecha_Inicio: { $lte: fechaFin } },
+              ],
             },
             // Eventos que terminan en el rango
             {
               $and: [
                 { Fecha_Conclusion: { $gte: fechaInicio } },
-                { Fecha_Conclusion: { $lte: fechaFin } }
-              ]
+                { Fecha_Conclusion: { $lte: fechaFin } },
+              ],
             },
             // Eventos que abarcan todo el rango
             {
               $and: [
                 { Fecha_Inicio: { $lte: fechaInicio } },
-                { Fecha_Conclusion: { $gte: fechaFin } }
-              ]
-            }
-          ]
+                { Fecha_Conclusion: { $gte: fechaFin } },
+              ],
+            },
+          ],
         },
         options: {
           sort: { Fecha_Inicio: 1 },
@@ -211,16 +234,16 @@ export async function buscarEventosPorRango(
             Nombre: 1,
             Fecha_Inicio: 1,
             Fecha_Conclusion: 1,
-            _id: 0
-          }
-        }
+            _id: 0,
+          },
+        },
       },
       RolesSistema.Directivo
     );
 
     return eventos || [];
   } catch (error) {
-    console.error('Error buscando eventos por rango:', error);
+    console.error("Error buscando eventos por rango:", error);
     throw error;
   }
 }
@@ -239,8 +262,8 @@ export async function buscarEventoPorId(
     const evento = await executeMongoOperation<T_Eventos>(
       instanciaEnUso,
       {
-        operation: 'findOne',
-        collection: 'T_Eventos',
+        operation: "findOne",
+        collection: "T_Eventos",
         filter: { Id_Evento: idEvento },
         options: {
           projection: {
@@ -248,16 +271,16 @@ export async function buscarEventoPorId(
             Nombre: 1,
             Fecha_Inicio: 1,
             Fecha_Conclusion: 1,
-            _id: 0
-          }
-        }
+            _id: 0,
+          },
+        },
       },
       RolesSistema.Responsable
     );
 
     return evento;
   } catch (error) {
-    console.error('Error buscando evento por ID:', error);
+    console.error("Error buscando evento por ID:", error);
     throw error;
   }
 }
@@ -283,38 +306,38 @@ export async function contarEventosPorMes(
     const count = await executeMongoOperation<number>(
       instanciaEnUso,
       {
-        operation: 'countDocuments',
-        collection: 'T_Eventos',
+        operation: "countDocuments",
+        collection: "T_Eventos",
         filter: {
           $or: [
             {
               $and: [
                 { Fecha_Inicio: { $gte: inicioMes } },
-                { Fecha_Inicio: { $lte: finMes } }
-              ]
+                { Fecha_Inicio: { $lte: finMes } },
+              ],
             },
             {
               $and: [
                 { Fecha_Conclusion: { $gte: inicioMes } },
-                { Fecha_Conclusion: { $lte: finMes } }
-              ]
+                { Fecha_Conclusion: { $lte: finMes } },
+              ],
             },
             {
               $and: [
                 { Fecha_Inicio: { $lte: inicioMes } },
-                { Fecha_Conclusion: { $gte: finMes } }
-              ]
-            }
-          ]
+                { Fecha_Conclusion: { $gte: finMes } },
+              ],
+            },
+          ],
         },
-        options: {}
+        options: {},
       },
       RolesSistema.Responsable
     );
 
     return count || 0;
   } catch (error) {
-    console.error('Error contando eventos por mes:', error);
+    console.error("Error contando eventos por mes:", error);
     throw error;
   }
 }
