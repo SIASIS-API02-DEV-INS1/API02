@@ -73,8 +73,8 @@ export async function buscarEventos(
       RolesSistema.Responsable
     );
 
-    // Obtener los eventos con paginación
-    const eventos = await executeMongoOperation<T_Eventos[]>(
+    // Obtener los eventos con paginación (ahora SÍ incluimos _id)
+    const eventosRaw = await executeMongoOperation<any[]>(
       instanciaEnUso,
       {
         operation: "find",
@@ -85,19 +85,26 @@ export async function buscarEventos(
           skip: offset,
           limit: limit,
           projection: {
-            Id_Evento: 1,
+            _id: 1, // Ahora SÍ incluimos _id para transformarlo
             Nombre: 1,
             Fecha_Inicio: 1,
             Fecha_Conclusion: 1,
-            _id: 0,
           },
         },
       },
       RolesSistema.Responsable
     );
 
+    // Transformar _id a Id_Evento
+    const eventos: T_Eventos[] = (eventosRaw || []).map((evento) => ({
+      Id_Evento: evento._id.toString(), // Convertir ObjectId a string
+      Nombre: evento.Nombre,
+      Fecha_Inicio: evento.Fecha_Inicio,
+      Fecha_Conclusion: evento.Fecha_Conclusion,
+    }));
+
     return {
-      eventos: eventos || [],
+      eventos,
       total: total || 0,
     };
   } catch (error) {
