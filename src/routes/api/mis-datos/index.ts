@@ -21,8 +21,6 @@ import { handleMongoError } from "../../../lib/helpers/handlers/errors/mongoDB";
 import { ActualizarUsuarioSuccessResponseAPI02, MisDatosErrorResponseAPI02, MisDatosResponsable, MisDatosSuccessResponseAPI02 } from "../../../interfaces/shared/apis/api02/mis-datos/types";
 import { buscarResponsablePorIdSelect } from "../../../../core/databases/queries/RDP03/responsables/buscarResponsablePorId";
 
-
-
 const router = Router();
 
 // Ruta para obtener los datos personales del responsable

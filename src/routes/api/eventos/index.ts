@@ -10,7 +10,6 @@ import { GetEventosSuccessResponse } from "../../../interfaces/shared/apis/event
 import isResponsableAuthenticated from "../../../middlewares/isResponsableAuthenticated";
 import {
   buscarEventos,
-  buscarEventosPorAño,
 } from "../../../../core/databases/queries/RDP03/eventos/buscarEventosPorMes";
 
 const EventosRouter = Router();
