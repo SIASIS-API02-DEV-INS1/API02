@@ -53,31 +53,31 @@ router.use("/login", loginRouter);
 
 router.use(
   "/mis-datos",
-  decodedRol as any,
+  decodedRol,
   isResponsableAuthenticated,
-  checkAuthentication as any,
+  checkAuthentication,
   misDatosRouter,
 );
 
 router.use(
   "/modificaciones-tablas",
-  decodedRol as any,
+  decodedRol,
   isDirectivoAuthenticated,
   isProfesorPrimariaAuthenticated,
   isProfesorSecundariaAuthenticated,
   isTutorAuthenticated,
   isAuxiliarAuthenticated,
-  isPersonalAdministrativoAuthenticated as any,
+  isPersonalAdministrativoAuthenticated,
   isResponsableAuthenticated,
-  checkAuthentication as any,
+  checkAuthentication,
   modificacionesTablasRouter,
 );
 
 router.use(
   "/mis-estudiantes-relacionados",
-  decodedRol as any,
+  decodedRol,
   isResponsableAuthenticated,
-  checkAuthentication as any,
+  checkAuthentication,
   estudiantesRelacionadosRouter,
 );
 
@@ -89,7 +89,7 @@ router.use(
   "/profesores-con-aula",
   decodedRol,
   isResponsableAuthenticated,
-  checkAuthentication as any,
+  checkAuthentication,
   profesoresConAulaRouter,
 );
 
@@ -98,10 +98,16 @@ router.use(
   decodedRol,
   isProfesorPrimariaAuthenticated,
   isTutorAuthenticated,
-  checkAuthentication as any,
+  checkAuthentication,
   misAulaRouter,
 );
 
-router.use("/estudiantes", decodedRol, estudiantesRouter);
+router.use(
+  "/estudiantes",
+  decodedRol,
+  isDirectivoAuthenticated,
+  checkAuthentication,
+  estudiantesRouter,
+);
 
 export default router;
